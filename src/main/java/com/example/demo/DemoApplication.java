@@ -6,7 +6,7 @@ import org.springframework.boot.web.servlet.support.SpringBootServletInitializer
 import org.springframework.web.bind.annotation.RestController;
 
 
-// hejhejeheasgs<edgs<dg
+
 @SpringBootApplication
 @RestController
 public class DemoApplication extends SpringBootServletInitializer {
