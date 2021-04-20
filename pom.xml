@@ -77,7 +77,7 @@
 		<repository>
 			<id>internal.repo</id>
 			<name>Internal repo</name>
-			<url>git@github.com:GSvesse/BE-Historia.git</url>
+			<url>git@github.com:GSvesse/Historiasthlm.git</url>
 		</repository>
 	</distributionManagement>
 
