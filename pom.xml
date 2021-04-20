@@ -13,7 +13,7 @@
 	<version>0.0.1-SNAPSHOT</version>
 	<packaging>war</packaging>
 	<name>demo</name>
-	<description>PVT group 10</description>
+	<description>PVT group 1510</description>
 	<properties>
 		<java.version>1.8</java.version>
 	</properties>
