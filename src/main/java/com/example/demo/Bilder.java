@@ -17,6 +17,12 @@ public class Bilder {
 
     private String tag;
 
+    private String dokumentID;
+
+    private String photographer;
+
+    private String licence;
+
     public Integer getId(){
         return id;
     }
@@ -33,6 +39,18 @@ public class Bilder {
         return tag;
     }
 
+    public String getdokumentID(){
+        return dokumentID;
+    }
+
+    public String getPhotographer(){
+        return photographer;
+    }
+
+    public String getLicence(){
+        return licence;
+    }
+
     public void setId(Integer id){
         this.id=id;
     }
@@ -47,6 +65,18 @@ public class Bilder {
 
     public void setTag(String tag){
         this.tag=tag;
+    }
+
+    public void setDokumentID(String dokumentID){
+        this.dokumentID = dokumentID;
+    }
+
+    public void setPhotographer(String photographer){
+        this.photographer = photographer;
+    }
+
+    public void setLicence(String licence){
+        this.licence = licence;
     }
 
 
