@@ -1,4 +1,6 @@
 package com.example.demo;
 
-public interface TagRepository {
+import org.springframework.data.repository.CrudRepository;
+
+public interface TagRepository extends CrudRepository<Tag, Integer>{
 }
