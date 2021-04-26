@@ -17,11 +17,15 @@ public class Bilder {
 
     private String tag;
 
-    private String dokumentID;
+    private String documentID;
 
     private String photographer;
 
     private String licence;
+
+    private String block;
+
+    private String district;
 
     public Integer getId(){
         return id;
@@ -39,8 +43,8 @@ public class Bilder {
         return tag;
     }
 
-    public String getdokumentID(){
-        return dokumentID;
+    public String getDocumentID(){
+        return documentID;
     }
 
     public String getPhotographer(){
@@ -49,6 +53,14 @@ public class Bilder {
 
     public String getLicence(){
         return licence;
+    }
+
+    public String getBlock(){
+        return block;
+    }
+
+    public String getDistrict(){
+        return district;
     }
 
     public void setId(Integer id){
@@ -67,8 +79,8 @@ public class Bilder {
         this.tag=tag;
     }
 
-    public void setDokumentID(String dokumentID){
-        this.dokumentID = dokumentID;
+    public void setDocumentID(String documentID){
+        this.documentID = documentID;
     }
 
     public void setPhotographer(String photographer){
@@ -77,6 +89,14 @@ public class Bilder {
 
     public void setLicence(String licence){
         this.licence = licence;
+    }
+
+    public void setBlock(String block){
+        this.block = block;
+    }
+
+    public void setDistrict(String district){
+        this.district = district;
     }
 
 
