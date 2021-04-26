@@ -23,5 +23,4 @@ public class Tag {
         this.tag = tag;
     }
 
-
 }
