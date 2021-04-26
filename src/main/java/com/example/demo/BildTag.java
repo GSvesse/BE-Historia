@@ -7,7 +7,7 @@ import javax.persistence.*;
 public class BildTag {
     @Id
     private Integer bildId;
-    @Id
+
     private Integer tagId;
 
     public Integer getBildId() {
