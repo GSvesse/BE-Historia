@@ -19,8 +19,9 @@ public class Tag {
         return tag;
     }
 
-    public void setTagId(int tagId) {
-        this.tagId = tagId;
+    public void setTag(String tag) {
+        this.tag = tag;
     }
+
 
 }
