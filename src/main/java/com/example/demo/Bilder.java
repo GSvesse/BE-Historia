@@ -1,11 +1,9 @@
 package com.example.demo;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
+
 //hejhej
-@Entity
+@Entity(name = "bilder")
 public class Bilder {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -14,8 +12,6 @@ public class Bilder {
     private String street;
 
     private int year;
-
-    private String tag;
 
     private String documentID;
 
@@ -37,10 +33,6 @@ public class Bilder {
 
     public String getStreet(){
         return street;
-    }
-
-    public String getTag(){
-        return tag;
     }
 
     public String getDocumentID(){
@@ -73,10 +65,6 @@ public class Bilder {
 
     public void setYear(int year){
         this.year=year;
-    }
-
-    public void setTag(String tag){
-        this.tag=tag;
     }
 
     public void setDocumentID(String documentID){
