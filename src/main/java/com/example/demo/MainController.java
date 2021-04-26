@@ -10,13 +10,13 @@ import org.springframework.web.bind.annotation.*;
 public class MainController {
     @Autowired
     private BildRepository bildRepository;
+    private TagRepository tagRepository;
 
-    @PostMapping(path="/add")
-    public @ResponseBody String addNewBild(@RequestParam String street, @RequestParam int year, @RequestParam String tag, @RequestParam String documentID, @RequestParam String photagrapher, @RequestParam String licence, @RequestParam String block, @RequestParam String district){
+    @PostMapping(path="bilder/add")
+    public @ResponseBody String addNewBild(@RequestParam String street, @RequestParam int year, @RequestParam String documentID, @RequestParam String photagrapher, @RequestParam String licence, @RequestParam String block, @RequestParam String district){
         Bilder b = new Bilder();
         b.setStreet(street);
         b.setYear(year);
-        b.setTag(tag);
         b.setDocumentID(documentID);
         b.setPhotographer(photagrapher);
         b.setLicence(licence);
@@ -25,6 +25,17 @@ public class MainController {
         bildRepository.save(b);
         return "Saved";
     }
+
+    @PostMapping(path = "tag/add")
+    public @ResponseBody String addNewTag(@RequestParam String tag){
+        Tag t = new Tag();
+        t.setTag(tag);
+        tagRepository.save(t);
+        return "Saved";
+    }
+
+    @PostMapping(path = "bildTag/add")
+    public @ResponseBody String addNewBildTag(@RequestParam)
 
     @GetMapping(path="/all")
     public @ResponseBody Iterable<Bilder>getAllBilder(){
