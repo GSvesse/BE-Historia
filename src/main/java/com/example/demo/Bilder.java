@@ -1,6 +1,7 @@
 package com.example.demo;
 
 import javax.persistence.*;
+import java.util.*;
 
 //hejhej
 @Entity(name = "bilder")
@@ -86,6 +87,7 @@ public class Bilder {
     public void setDistrict(String district){
         this.district = district;
     }
+
 
 
 }

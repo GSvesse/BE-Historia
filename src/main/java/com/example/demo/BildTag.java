@@ -2,13 +2,14 @@
 package com.example.demo;
 
 import javax.persistence.*;
+import java.io.Serializable;
 
-@Entity(name = "bildTag")
-public class BildTag {
-    @Id
+@Embeddable
+public class BildTag implements Serializable {
     private Integer bildId;
-
     private Integer tagId;
+
+
 
     public Integer getBildId() {
         return bildId;

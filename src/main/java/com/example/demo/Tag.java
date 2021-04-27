@@ -23,4 +23,8 @@ public class Tag {
         this.tag = tag;
     }
 
+    //@OneToOne(mappedBy = "tagid")
+    //private BildTag bildTag2;
+
+
 }
