@@ -10,7 +10,10 @@ import org.springframework.web.bind.annotation.*;
 public class MainController {
     @Autowired
     private BildRepository bildRepository;
+    @Autowired
     private TagRepository tagRepository;
+    @Autowired
+    private AddressRepository addressRepository;
 
     @PostMapping(path="bilder/add")
     public @ResponseBody String addNewBild(@RequestParam String street, @RequestParam int year, @RequestParam String documentID, @RequestParam String photagrapher, @RequestParam String licence, @RequestParam String block, @RequestParam String district){
@@ -31,6 +34,14 @@ public class MainController {
         Tag t = new Tag();
         t.setTag(tag);
         tagRepository.save(t);
+        return "Saved";
+    }
+
+    @PostMapping(path = "address/add")
+    public @ResponseBody String addNewAddress(@RequestParam String address){
+        Address a = new Address();
+        a.setAddress(address);
+        addressRepository.save(a);
         return "Saved";
     }
 

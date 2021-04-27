@@ -34,6 +34,14 @@ public class Bilder {
     )
     Set<Tag> tags;
 
+    @ManyToMany
+    @JoinTable(
+            name = "bilder_address",
+            joinColumns = @JoinColumn(name = "bild_id"),
+            inverseJoinColumns = @JoinColumn(name = "address_id")
+    )
+    Set<Address> addresses;
+
     public Integer getId(){
         return id;
     }
