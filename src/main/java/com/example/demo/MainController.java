@@ -34,11 +34,6 @@ public class MainController {
         return "Saved";
     }
 
-    @PostMapping(path = "bildTag/add")
-    public @ResponseBody String addNewBildTag(@RequestParam Integer bildID, @RequestParam Integer tagID){
-        return "Saved";
-    }
-
     @GetMapping(path="/all")
     public @ResponseBody Iterable<Bilder>getAllBilder(){
         return bildRepository.findAll();

@@ -1,6 +1,7 @@
 package com.example.demo;
 
 import javax.persistence.*;
+import java.util.Set;
 
 //hejhej
 @Entity(name = "bilder")
@@ -13,6 +14,8 @@ public class Bilder {
 
     private int year;
 
+    private String description;
+
     private String documentID;
 
     private String photographer;
@@ -23,12 +26,24 @@ public class Bilder {
 
     private String district;
 
+    @ManyToMany
+    @JoinTable(
+            name = "bilder_tag",
+            joinColumns = @JoinColumn(name = "bild_id"),
+            inverseJoinColumns = @JoinColumn(name = "tag_id")
+    )
+    Set<Tag> tags;
+
     public Integer getId(){
         return id;
     }
 
     public int getYear(){
         return year;
+    }
+
+    public String getDescription(){
+        return description;
     }
 
     public String getStreet(){
@@ -65,6 +80,10 @@ public class Bilder {
 
     public void setYear(int year){
         this.year=year;
+    }
+
+    public void setDescription(String description){
+        this.description = description;
     }
 
     public void setDocumentID(String documentID){

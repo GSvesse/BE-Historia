@@ -2,6 +2,7 @@
 package com.example.demo;
 
 import javax.persistence.*;
+import java.util.Set;
 
 @Entity(name = "tag")
 public class Tag {
@@ -10,6 +11,9 @@ public class Tag {
     private Integer tagId;
 
     private String tag;
+
+    @ManyToMany (mappedBy = "tags")
+    Set<Bilder> bilder;
 
     public int getTagId() {
         return tagId;
