@@ -21,7 +21,7 @@ public class MainController {
     private AddressRepository addressRepository;
 
     @PostMapping(path="bilder/add")
-    public @ResponseBody String addNewBild(@RequestParam("image")MultipartFile multipartFile, @RequestParam int year, @RequestParam Set<Address> addresses, @RequestParam Set<Tag> tags, @RequestParam String documentID, @RequestParam String photagrapher, @RequestParam String licence, @RequestParam String block, @RequestParam String district, @RequestParam String description) throws IOException {
+    public @ResponseBody String addNewBild(@RequestParam("image")MultipartFile multipartFile, @RequestParam int year, @RequestParam Set<Address> addresses, @RequestParam Set<Tag> tags, @RequestParam String documentID, @RequestParam String photographer, @RequestParam String licence, @RequestParam String block, @RequestParam String district, @RequestParam String description) throws IOException {
         Bilder b = new Bilder();
         String fileName = StringUtils.cleanPath(multipartFile.getOriginalFilename());
         b.setImage(fileName);
@@ -29,7 +29,7 @@ public class MainController {
         b.setAddresses(addresses);
         b.setTags(tags);
         b.setDocumentID(documentID);
-        b.setPhotographer(photagrapher);
+        b.setPhotographer(photographer);
         b.setLicence(licence);
         b.setBlock(block);
         b.setDistrict(district);
