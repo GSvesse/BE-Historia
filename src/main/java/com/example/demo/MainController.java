@@ -4,6 +4,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Set;
+
 //hejhej
 @Controller
 @RequestMapping(path="/demo")
@@ -16,15 +18,17 @@ public class MainController {
     private AddressRepository addressRepository;
 
     @PostMapping(path="bilder/add")
-    public @ResponseBody String addNewBild(@RequestParam String street, @RequestParam int year, @RequestParam String documentID, @RequestParam String photagrapher, @RequestParam String licence, @RequestParam String block, @RequestParam String district){
+    public @ResponseBody String addNewBild(@RequestParam int year, @RequestParam Set<Address> addresses, @RequestParam Set<Tag> tags, @RequestParam String documentID, @RequestParam String photagrapher, @RequestParam String licence, @RequestParam String block, @RequestParam String district, @RequestParam String description){
         Bilder b = new Bilder();
-        b.setStreet(street);
         b.setYear(year);
+        b.setAddresses(addresses);
+        b.setTags(tags);
         b.setDocumentID(documentID);
         b.setPhotographer(photagrapher);
         b.setLicence(licence);
         b.setBlock(block);
         b.setDistrict(district);
+        b.setDescription(description);
         bildRepository.save(b);
         return "Saved";
     }

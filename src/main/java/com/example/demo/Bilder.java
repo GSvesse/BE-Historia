@@ -54,10 +54,6 @@ public class Bilder {
         return description;
     }
 
-    public String getStreet(){
-        return street;
-    }
-
     public String getDocumentID(){
         return documentID;
     }
@@ -78,12 +74,16 @@ public class Bilder {
         return district;
     }
 
-    public void setId(Integer id){
-        this.id=id;
+    public Set<Tag> getTags(){
+        return tags;
     }
 
-    public void setStreet(String street){
-        this.street=street;
+    public Set<Address> getAddresses(){
+        return addresses;
+    }
+
+    public void setId(Integer id){
+        this.id=id;
     }
 
     public void setYear(int year){
@@ -113,6 +113,15 @@ public class Bilder {
     public void setDistrict(String district){
         this.district = district;
     }
+
+    public void setTags(Set<Tag> tags){
+        this.tags = tags;
+    }
+
+    public void setAddresses(Set<Address> addresses){
+        this.addresses = addresses;
+    }
+
 
 
 }
