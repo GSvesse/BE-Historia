@@ -10,7 +10,7 @@ public class Bilder {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer id;
 
-    private String street;
+    private String image;
 
     private int year;
 
@@ -44,6 +44,10 @@ public class Bilder {
 
     public Integer getId(){
         return id;
+    }
+
+    public String getImage(){
+        return image;
     }
 
     public int getYear(){
@@ -84,6 +88,10 @@ public class Bilder {
 
     public void setId(Integer id){
         this.id=id;
+    }
+
+    public void setImage(String image){
+        this.image = image;
     }
 
     public void setYear(int year){

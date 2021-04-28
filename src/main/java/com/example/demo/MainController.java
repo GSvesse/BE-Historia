@@ -2,8 +2,11 @@ package com.example.demo;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.Set;
 
 //hejhej
@@ -18,8 +21,10 @@ public class MainController {
     private AddressRepository addressRepository;
 
     @PostMapping(path="bilder/add")
-    public @ResponseBody String addNewBild(@RequestParam int year, @RequestParam Set<Address> addresses, @RequestParam Set<Tag> tags, @RequestParam String documentID, @RequestParam String photagrapher, @RequestParam String licence, @RequestParam String block, @RequestParam String district, @RequestParam String description){
+    public @ResponseBody String addNewBild(@RequestParam("image")MultipartFile multipartFile, @RequestParam int year, @RequestParam Set<Address> addresses, @RequestParam Set<Tag> tags, @RequestParam String documentID, @RequestParam String photagrapher, @RequestParam String licence, @RequestParam String block, @RequestParam String district, @RequestParam String description) throws IOException {
         Bilder b = new Bilder();
+        String fileName = StringUtils.cleanPath(multipartFile.getOriginalFilename());
+        b.setImage(fileName);
         b.setYear(year);
         b.setAddresses(addresses);
         b.setTags(tags);
@@ -30,6 +35,8 @@ public class MainController {
         b.setDistrict(district);
         b.setDescription(description);
         bildRepository.save(b);
+        String uploadDir = "user-photos/" + b.getId();
+        FileUploadUtil.saveFile(uploadDir, fileName, multipartFile);
         return "Saved";
     }
 
