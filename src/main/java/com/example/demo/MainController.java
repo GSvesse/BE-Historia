@@ -60,4 +60,8 @@ public class MainController {
     public @ResponseBody Iterable<Bilder>getAllBilder(){
         return bildRepository.findAll();
     }
+    @GetMapping(path="/addresses")
+    public @ResponseBody Iterable<Address>getAllAddresses(){
+        return addressRepository.findAll();
+    }
 }
