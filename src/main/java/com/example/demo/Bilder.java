@@ -27,21 +27,21 @@ public class Bilder {
 
     private String district;
 
-    @ManyToMany
-    @JoinTable(
-            name = "bilder_tag",
-            joinColumns = @JoinColumn(name = "bild_id"),
-            inverseJoinColumns = @JoinColumn(name = "tag_id")
-    )
-    Set<Tag> tags;
-
-    @ManyToMany
-    @JoinTable(
-            name = "bilder_address",
-            joinColumns = @JoinColumn(name = "bild_id"),
-            inverseJoinColumns = @JoinColumn(name = "address_id")
-    )
-    Set<Address> addresses;
+//    @ManyToMany
+//    @JoinTable(
+//            name = "bilder_tag",
+//            joinColumns = @JoinColumn(name = "bild_id"),
+//            inverseJoinColumns = @JoinColumn(name = "tag_id")
+//    )
+//    Set<Tag> tags;
+//
+//    @ManyToMany
+//    @JoinTable(
+//            name = "bilder_address",
+//            joinColumns = @JoinColumn(name = "bild_id"),
+//            inverseJoinColumns = @JoinColumn(name = "address_id")
+//    )
+//    Set<Address> addresses;
 
     public Integer getId(){
         return id;
@@ -79,13 +79,13 @@ public class Bilder {
         return district;
     }
 
-    public Set<Tag> getTags(){
-        return tags;
-    }
-
-    public Set<Address> getAddresses(){
-        return addresses;
-    }
+//    public Set<Tag> getTags(){
+//        return tags;
+//    }
+//
+//    public Set<Address> getAddresses(){
+//        return addresses;
+//    }
 
     public void setId(Integer id){
         this.id=id;
@@ -123,13 +123,13 @@ public class Bilder {
         this.district = district;
     }
 
-    public void setTags(Set<Tag> tags){
-        this.tags = tags;
-    }
-
-    public void setAddresses(Set<Address> addresses){
-        this.addresses = addresses;
-    }
+//    public void setTags(Set<Tag> tags){
+//        this.tags = tags;
+//    }
+//
+//    public void setAddresses(Set<Address> addresses){
+//        this.addresses = addresses;
+//    }
 
 
 

@@ -11,8 +11,8 @@ public class Address {
 
     private String address;
 
-    @ManyToMany (mappedBy = "addresses")
-    Set<Bilder> bilder;
+//    @ManyToMany (mappedBy = "addresses")
+//    Set<Bilder> bilder;
 
     public String getAddress(){
         return address;
