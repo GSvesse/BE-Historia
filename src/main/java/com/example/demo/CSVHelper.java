@@ -1,10 +1,7 @@
 package com.example.demo;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.PrintWriter;
+import java.awt.image.BufferedImage;
+import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
@@ -13,6 +10,8 @@ import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVParser;
 import org.apache.commons.csv.CSVRecord;
 import org.springframework.web.multipart.MultipartFile;
+
+import javax.imageio.ImageIO;
 
 public class CSVHelper {
     public static String TYPE = "text/csv";
@@ -40,6 +39,10 @@ public class CSVHelper {
                 // hoppar över tag, street och address
                 b.setBlock(csvRecord.get("block"));
                 b.setDistrict(csvRecord.get("district"));
+
+                String urlToPhoto = "https://digitalastadsmuseet.stockholm.se";
+                urlToPhoto += csvRecord.get("Photo-src");
+                BufferedImage myPicture = ImageIO.read(new File(urlToPhoto));
 
                 bildSamling.add(b);
             }
