@@ -13,6 +13,7 @@ import java.util.Set;
 //hejhej
 
 @Controller
+@CrossOrigin
 @RequestMapping(path="/demo")
 public class MainController {
     @Autowired
