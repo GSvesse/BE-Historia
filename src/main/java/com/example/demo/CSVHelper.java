@@ -41,7 +41,6 @@ public class CSVHelper {
                 b.setBlock(csvRecord.get("block"));
                 b.setDistrict(csvRecord.get("district"));
 
-
                 bildSamling.add(b);
             }
 
