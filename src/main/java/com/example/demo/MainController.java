@@ -23,8 +23,8 @@ public class MainController {
     @PostMapping(path="bilder/add")
     public @ResponseBody String addNewBild(@RequestParam("image")MultipartFile multipartFile, @RequestParam int year, @RequestParam Set<Address> addresses, @RequestParam Set<Tag> tags, @RequestParam String documentID, @RequestParam String photographer, @RequestParam String licence, @RequestParam String block, @RequestParam String district, @RequestParam String description) throws IOException {
         Bilder b = new Bilder();
-        String fileName = StringUtils.cleanPath(multipartFile.getOriginalFilename());
-        b.setImage(fileName);
+        //String fileName = StringUtils.cleanPath(multipartFile.getOriginalFilename());
+        b.setImage(multipartFile.getBytes());
         b.setYear(year);
         b.setAddresses(addresses);
         b.setTags(tags);
@@ -35,8 +35,7 @@ public class MainController {
         b.setDistrict(district);
         b.setDescription(description);
         bildRepository.save(b);
-        String uploadDir = "user-photos/" + b.getId();
-        FileUploadUtil.saveFile(uploadDir, fileName, multipartFile);
+
         return "Saved";
     }
 
@@ -64,4 +63,9 @@ public class MainController {
     public @ResponseBody Iterable<Address>getAllAddresses(){
         return addressRepository.findAll();
     }
+
+//    @GetMapping(path = "/getBildById")
+//    public @ResponseBody Iterable<Bilder>getBildById(Integer id){
+//        return bildRepository.findById(id).get();
+//    }
 }

@@ -10,7 +10,8 @@ public class Bilder {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer id;
 
-    private String image;
+    @Lob
+    private byte[] image;
 
     private int year;
 
@@ -46,7 +47,7 @@ public class Bilder {
         return id;
     }
 
-    public String getImage(){
+    public byte[] getImage(){
         return image;
     }
 
@@ -90,7 +91,7 @@ public class Bilder {
         this.id=id;
     }
 
-    public void setImage(String image){
+    public void setImage(byte[] image){
         this.image = image;
     }
 
