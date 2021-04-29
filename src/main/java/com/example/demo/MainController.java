@@ -26,11 +26,11 @@ public class MainController {
     private AddressRepository addressRepository;
 
     @PostMapping(path="bilder/add")
-    public @ResponseBody String addNewBild(@RequestParam("image")MultipartFile multipartFile, @RequestParam int year, @RequestParam String documentID, @RequestParam String photographer, @RequestParam String licence, @RequestParam String block, @RequestParam String district, @RequestParam String description) throws IOException {
+    public @ResponseBody String addNewBild(@RequestParam("image")MultipartFile file, @RequestParam int year, @RequestParam String documentID, @RequestParam String photographer, @RequestParam String licence, @RequestParam String block, @RequestParam String district, @RequestParam String description) throws IOException {
         Bilder b = new Bilder();
-        String fileName = StringUtils.cleanPath(multipartFile.getOriginalFilename());
+//        String fileName = StringUtils.cleanPath(multipartFile.getOriginalFilename());
 
-        b.setImage(fileName.getBytes());
+        b.setImage(file.getBytes());
         b.setYear(year);
         //b.setAddresses(addresses);
         //b.setTags(tags);

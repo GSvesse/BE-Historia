@@ -11,6 +11,7 @@ public class Bilder {
     private Integer id;
 
     @Lob
+    @Column(columnDefinition = "MEDIUMBLOB")
     private byte[] image;
 
     private int year;
