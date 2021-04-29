@@ -5,12 +5,17 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.util.StreamUtils;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.sql.Blob;
+import java.sql.SQLException;
+import java.util.Optional;
 import java.util.Set;
 
 //hejhej
@@ -30,6 +35,7 @@ public class MainController {
     public @ResponseBody String addNewBild(@RequestParam("image")MultipartFile multipartFile, @RequestParam int year, @RequestParam String documentID, @RequestParam String photographer, @RequestParam String licence, @RequestParam String block, @RequestParam String district, @RequestParam String description) throws IOException {
         Bilder b = new Bilder();
         String fileName = StringUtils.cleanPath(multipartFile.getOriginalFilename());
+
         b.setImage(fileName.getBytes());
         b.setYear(year);
         //b.setAddresses(addresses);
@@ -69,12 +75,39 @@ public class MainController {
         return addressRepository.findAll();
     }
 
-    @GetMapping("/files/{id}")
-    public ResponseEntity<byte[]> getImage(@PathVariable Integer id) {
-        byte[] bild = bildRepository.findById(id).get().getImage();
+//    @GetMapping(value = "/files/{id}", produces = MediaType.IMAGE_JPEG_VALUE)
+//    public void fromDatabaseAsHttpServResp(@PathVariable("id") Integer id, HttpServletResponse response)
+//            throws SQLException, IOException {
+//
+//        Optional<Bilder> bild = bildRepository.findById(id);
+//
+//        if (bild.isPresent()) {
+//
+//            byte[] image = bild.get().getImage();
+//
+//            StreamUtils.copy(image.getBinaryStream(), response.getOutputStream());
+//        }
+//    }
 
+    @GetMapping("files/{id}")
+    public ResponseEntity<byte[]> fromDatabaseAsResEntity(@PathVariable("id") Integer id) throws SQLException {
 
-        return ResponseEntity.ok()
-                .contentType(MediaType.ALL).body(bild);
+        Optional<Bilder> bild = bildRepository.findById(id);
+        byte[] imageBytes = null;
+        if (bild.isPresent()) {
+
+            imageBytes = bild.get().getImage();
+        }
+
+        return ResponseEntity.ok().contentType(MediaType.IMAGE_JPEG).body(imageBytes);
     }
+
+//    @GetMapping("/files/{id}")
+//    public ResponseEntity<byte[]> getImage(@PathVariable Integer id) {
+//        byte[] bild = bildRepository.findById(id).get().getImage();
+//
+//
+//        return ResponseEntity.ok()
+//                .contentType(MediaType.IMAGE_JPEG_VALUE).body(bild);
+//    }
 }
