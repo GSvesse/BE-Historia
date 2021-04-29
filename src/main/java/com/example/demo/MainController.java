@@ -2,6 +2,7 @@ package com.example.demo;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -10,6 +11,7 @@ import java.io.IOException;
 import java.util.Set;
 
 //hejhej
+
 @Controller
 @RequestMapping(path="/demo")
 public class MainController {
@@ -21,13 +23,13 @@ public class MainController {
     private AddressRepository addressRepository;
 
     @PostMapping(path="bilder/add")
-    public @ResponseBody String addNewBild(@RequestParam("image")MultipartFile multipartFile, @RequestParam int year, @RequestParam Set<Address> addresses, @RequestParam Set<Tag> tags, @RequestParam String documentID, @RequestParam String photographer, @RequestParam String licence, @RequestParam String block, @RequestParam String district, @RequestParam String description) throws IOException {
+    public @ResponseBody String addNewBild(@RequestParam("image")MultipartFile multipartFile, @RequestParam int year, @RequestParam String documentID, @RequestParam String photographer, @RequestParam String licence, @RequestParam String block, @RequestParam String district, @RequestParam String description) throws IOException {
         Bilder b = new Bilder();
         String fileName = StringUtils.cleanPath(multipartFile.getOriginalFilename());
         b.setImage(fileName.getBytes());
         b.setYear(year);
-        b.setAddresses(addresses);
-        b.setTags(tags);
+        //b.setAddresses(addresses);
+        //b.setTags(tags);
         b.setDocumentID(documentID);
         b.setPhotographer(photographer);
         b.setLicence(licence);
