@@ -1,11 +1,13 @@
 package com.example.demo;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.io.IOException;
 import java.util.Set;
@@ -38,7 +40,6 @@ public class MainController {
         b.setDistrict(district);
         b.setDescription(description);
         bildRepository.save(b);
-
         return "Saved";
     }
 
@@ -67,8 +68,13 @@ public class MainController {
         return addressRepository.findAll();
     }
 
-//    @GetMapping(path = "/getBildById")
-//    public @ResponseBody Iterable<Bilder>getBildById(Integer id){
-//        return bildRepository.findById(id).get();
-//    }
+    @GetMapping("/files/{id}")
+    public ResponseEntity<byte[]> getImage(@PathVariable Integer id) {
+        Bilder bild = bildRepository.findById(id).get();
+
+
+        return ResponseEntity.ok()
+                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + bild.getId() + "\"")
+                .body(bild.getImage());
+    }
 }
