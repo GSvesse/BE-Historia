@@ -1,19 +1,13 @@
 package com.example.demo;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.util.StreamUtils;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
-
-import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.sql.Blob;
 import java.sql.SQLException;
 import java.util.Optional;
 import java.util.Set;
@@ -75,20 +69,6 @@ public class MainController {
         return addressRepository.findAll();
     }
 
-//    @GetMapping(value = "/files/{id}", produces = MediaType.IMAGE_JPEG_VALUE)
-//    public void fromDatabaseAsHttpServResp(@PathVariable("id") Integer id, HttpServletResponse response)
-//            throws SQLException, IOException {
-//
-//        Optional<Bilder> bild = bildRepository.findById(id);
-//
-//        if (bild.isPresent()) {
-//
-//            byte[] image = bild.get().getImage();
-//
-//            StreamUtils.copy(image.getBinaryStream(), response.getOutputStream());
-//        }
-//    }
-
     @GetMapping("files/{id}")
     public ResponseEntity<byte[]> fromDatabaseAsResEntity(@PathVariable("id") Integer id) throws SQLException {
 
@@ -102,12 +82,5 @@ public class MainController {
         return ResponseEntity.ok().contentType(MediaType.IMAGE_JPEG).body(imageBytes);
     }
 
-//    @GetMapping("/files/{id}")
-//    public ResponseEntity<byte[]> getImage(@PathVariable Integer id) {
-//        byte[] bild = bildRepository.findById(id).get().getImage();
-//
-//
-//        return ResponseEntity.ok()
-//                .contentType(MediaType.IMAGE_JPEG_VALUE).body(bild);
-//    }
+
 }
