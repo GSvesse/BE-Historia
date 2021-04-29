@@ -23,8 +23,8 @@ public class CSVHelper {
         return TYPE.equals(file.getContentType());
     }
 
-    public static List<Bilder> csvToTutorials(InputStream is) {
-        try (BufferedReader fileReader = new BufferedReader(new InputStreamReader(is, StandardCharsets.UTF_8));
+    public static List<Bilder> csvToDatabase(InputStream input) {
+        try (BufferedReader fileReader = new BufferedReader(new InputStreamReader(input, StandardCharsets.UTF_8));
              CSVParser csvParser = new CSVParser(fileReader, CSVFormat.DEFAULT.withFirstRecordAsHeader().withIgnoreHeaderCase().withTrim())) {
 
             List<Bilder> bildSamling = new ArrayList<>();
