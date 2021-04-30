@@ -3,7 +3,7 @@ package com.example.demo;
 import javax.persistence.*;
 import java.util.Set;
 
-//hejhej
+
 @Entity(name = "bilder")
 public class Bilder {
     @Id
