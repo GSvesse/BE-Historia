@@ -9,6 +9,8 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
@@ -31,7 +33,7 @@ public class MainController {
         b.setImage(file.getBytes());
         b.setYear(year);
         //b.setAddresses(addresses);
-        b.setTags(tags);
+        b.setTags(makeTags(tags));
         b.setDocumentID(documentID);
         b.setPhotographer(photographer);
         b.setLicence(licence);
@@ -80,5 +82,25 @@ public class MainController {
         return ResponseEntity.ok().contentType(MediaType.IMAGE_JPEG).body(imageBytes);
     }
 
+    // TODO: ändra till att returnera som en lista
+    public List<Tag> makeTags(String tagString){
+        String[] tagArr = tagString.trim().split("\\s\\s+");
+
+        List<Tag> result = new ArrayList<>();
+
+        assert tagArr != null;
+
+        for (String newTag : tagArr){
+//            tagRepository.findByTag(newTag).get(0) - Söker genom tagRepository efter ett entry med taggen newTag
+            if (tagRepository.findByTag(newTag).isEmpty()) {
+                Tag tag = new Tag();
+                tag.setTag(newTag);
+                System.out.println(tag);
+                tagRepository.save(tag);
+            }
+            result.add(tagRepository.findByTag(newTag).get(0));
+        }
+        return result;
+    }
 
 }

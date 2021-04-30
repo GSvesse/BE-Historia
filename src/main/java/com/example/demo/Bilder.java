@@ -1,11 +1,16 @@
 package com.example.demo;
 
+import org.springframework.util.StringUtils;
+
 import javax.persistence.*;
+import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 
 @Entity(name = "bilder")
 public class Bilder {
+
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer id;
@@ -34,7 +39,7 @@ public class Bilder {
             joinColumns = @JoinColumn(name = "bild_id"),
             inverseJoinColumns = @JoinColumn(name = "tag_id")
     )
-    Set<Tag> tags;
+    private Set<Tag> tags;
 
 //    @ManyToMany
 //    @JoinTable(
@@ -124,14 +129,14 @@ public class Bilder {
         this.district = district;
     }
 
-    public void setTags(String tagString){
-        String[] tagArr = tagString.split(" {3}");
-        for (String newTag : tagArr){
-            Tag tag = new Tag();
-            tag.setTag(newTag);
-            tags.add(tag);
+    public void setTags(List<Tag> tagList){
+        tags = new HashSet<>();
+        for (Tag tag : tagList){
+
+            this.tags.add(tag);
+            tag.getBilder().add(this);
         }
-        this.tags = tags;
+        //this.tags = tags;
     }
 
 //    public void setAddresses(Set<Address> addresses){

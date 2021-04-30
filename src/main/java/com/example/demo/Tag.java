@@ -2,6 +2,7 @@
 package com.example.demo;
 
 import javax.persistence.*;
+import java.util.HashSet;
 import java.util.Set;
 
 @Entity(name = "tag")
@@ -13,14 +14,18 @@ public class Tag {
     private String tag;
 
     @ManyToMany (mappedBy = "tags")
-    Set<Bilder> bilder;
+    private Set<Bilder> bilder;
 
-    public int getTagId() {
-        return tagId;
-    }
+//    public int getTagId() {
+//        return tagId;
+//    }
 
     public String getTag() {
         return tag;
+    }
+
+    public Set<Bilder> getBilder(){
+        return bilder;
     }
 
     public void setTag(String tag) {
