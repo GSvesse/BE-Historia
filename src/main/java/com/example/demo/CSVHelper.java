@@ -15,10 +15,9 @@ import javax.imageio.ImageIO;
 
 public class CSVHelper {
     public static String TYPE = "text/csv";
-    //static String[] HEADERs = { lägg eventuellt till headers "såhär" };
+    //static String[] HEADERs = { lägg eventuellt till headers "såhär", "test" };
 
     public static boolean hasCSVFormat(MultipartFile file) {
-
         return TYPE.equals(file.getContentType());
     }
 
@@ -30,29 +29,49 @@ public class CSVHelper {
 
             Iterable<CSVRecord> csvRecords = csvParser.getRecords();
 
+            ByteArrayOutputStream byteArray = new ByteArrayOutputStream();
+
             for (CSVRecord csvRecord : csvRecords) {
-                // Kolla om street och address är null if, hoppa över.
-                Bilder b = new Bilder();
-                // Kolla om både gata och adress är NULL
-                b.setDescription(csvRecord.get("Description"));
-                b.setYear(Integer.parseInt((csvRecord.get("year"))));
-                b.setPhotographer(csvRecord.get("Photographer"));
-                b.setLicence(csvRecord.get("licence"));
-                // hoppar över tag, street och address, skicka som sträng
-                // Skicka tag som sträng
-                b.setBlock(csvRecord.get("block"));
-                b.setDistrict(csvRecord.get("district"));
 
-                String urlToPhoto = "https://digitalastadsmuseet.stockholm.se";
-                urlToPhoto += csvRecord.get("Photo-src");
-                // Hämta som multipart file
-                // skriv den som getbytes.
-                BufferedImage myPicture = ImageIO.read(new File(urlToPhoto));
+                // Kolla om street och address är null if, hoppa över:
+                if (!(csvRecord.get("Adress").equals("null") || csvRecord.get("street").equals("null"))){
+                    Bilder b = new Bilder();
+
+                    b.setDescription(csvRecord.get("Description"));
+                    b.setYear(Integer.parseInt((csvRecord.get("year"))));
+                    b.setPhotographer(csvRecord.get("Photographer"));
+                    b.setLicence(csvRecord.get("license"));
+
+                    if (!csvRecord.get("Adress").equals("null")){
+                        b.setAddresses(csvRecord.get("Adress"));
+                    } else {
+                        b.setAddresses(csvRecord.get("street"));
+                    }
+
+                    b.setTags(csvRecord.get("Tag"));
+
+                    b.setBlock(csvRecord.get("block"));
+                    b.setDistrict(csvRecord.get("district"));
+
+                    String urlToPhoto = "https://digitalastadsmuseet.stockholm.se";
+                    urlToPhoto += csvRecord.get("Photo-src");
+
+                    // Läs in foto:
+                    BufferedImage fetchedImage = ImageIO.read(new File(urlToPhoto));
+
+                    // Gör om till byte array:
+                    ImageIO.write(fetchedImage, "jpg", byteArray);
+                    byteArray.flush();
+                    byte[] byteImage = byteArray.toByteArray();
+
+                    // Sätt till att vara bildens foto:
+                    b.setImage(byteImage);
 
 
-                bildSamling.add(b);
+
+                    bildSamling.add(b);
+                }
             }
-
             return bildSamling;
         } catch (IOException e) {
             throw new RuntimeException("fail to parse CSV file: " + e.getMessage());
