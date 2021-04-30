@@ -32,6 +32,7 @@ public class CSVHelper {
 
             for (CSVRecord csvRecord : csvRecords) {
                 Bilder b = new Bilder();
+                // Kolla om både gata och adress är NULL
                 b.setDescription(csvRecord.get("Description"));
                 b.setYear(Integer.parseInt((csvRecord.get("year"))));
                 b.setPhotographer(csvRecord.get("Photographer"));
@@ -42,7 +43,10 @@ public class CSVHelper {
 
                 String urlToPhoto = "https://digitalastadsmuseet.stockholm.se";
                 urlToPhoto += csvRecord.get("Photo-src");
+                // Hämta som multipart file
+                // skriv den som getbytes.
                 BufferedImage myPicture = ImageIO.read(new File(urlToPhoto));
+
 
                 bildSamling.add(b);
             }
