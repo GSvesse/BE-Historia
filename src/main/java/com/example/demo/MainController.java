@@ -2,6 +2,7 @@ package com.example.demo;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.stereotype.Service;
@@ -10,6 +11,8 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.sql.SQLException;
+import java.util.Optional;
 import java.util.Set;
 
 //hejhej
@@ -93,8 +96,16 @@ public class MainController {
         return addressRepository.findAll();
     }
 
-//    @GetMapping(path = "/getBildById")
-//    public @ResponseBody Iterable<Bilder>getBildById(Integer id){
-//        return bildRepository.findById(id).get();
-//    }
+    @GetMapping("files/{id}")
+    public ResponseEntity<byte[]> fromDatabaseAsResEntity(@PathVariable("id") Integer id) throws SQLException {
+
+        Optional<Bilder> bild = bildRepository.findById(id);
+        byte[] imageBytes = null;
+        if (bild.isPresent()) {
+
+            imageBytes = bild.get().getImage();
+        }
+
+        return ResponseEntity.ok().contentType(MediaType.IMAGE_JPEG).body(imageBytes);
+    }
 }
