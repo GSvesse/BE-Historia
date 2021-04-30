@@ -15,7 +15,7 @@ import javax.imageio.ImageIO;
 
 public class CSVHelper {
     public static String TYPE = "text/csv";
-    static String[] HEADERs = { "Id", "Title", "Description", "Published" };
+    //static String[] HEADERs = { lägg eventuellt till headers "såhär" };
 
     public static boolean hasCSVFormat(MultipartFile file) {
 
@@ -31,13 +31,15 @@ public class CSVHelper {
             Iterable<CSVRecord> csvRecords = csvParser.getRecords();
 
             for (CSVRecord csvRecord : csvRecords) {
+                // Kolla om street och address är null if, hoppa över.
                 Bilder b = new Bilder();
                 // Kolla om både gata och adress är NULL
                 b.setDescription(csvRecord.get("Description"));
                 b.setYear(Integer.parseInt((csvRecord.get("year"))));
                 b.setPhotographer(csvRecord.get("Photographer"));
                 b.setLicence(csvRecord.get("licence"));
-                // hoppar över tag, street och address
+                // hoppar över tag, street och address, skicka som sträng
+                // Skicka tag som sträng
                 b.setBlock(csvRecord.get("block"));
                 b.setDistrict(csvRecord.get("district"));
 
