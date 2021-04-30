@@ -12,8 +12,8 @@ public class Tag {
 
     private String tag;
 
-//    @ManyToMany (mappedBy = "tags")
-//    Set<Bilder> bilder;
+    @ManyToMany (mappedBy = "tags")
+    Set<Bilder> bilder;
 
     public int getTagId() {
         return tagId;

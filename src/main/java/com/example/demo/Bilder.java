@@ -28,14 +28,14 @@ public class Bilder {
 
     private String district;
 
-//    @ManyToMany
-//    @JoinTable(
-//            name = "bilder_tag",
-//            joinColumns = @JoinColumn(name = "bild_id"),
-//            inverseJoinColumns = @JoinColumn(name = "tag_id")
-//    )
-//    Set<Tag> tags;
-//
+    @ManyToMany
+    @JoinTable(
+            name = "bilder_tag",
+            joinColumns = @JoinColumn(name = "bild_id"),
+            inverseJoinColumns = @JoinColumn(name = "tag_id")
+    )
+    Set<Tag> tags;
+
 //    @ManyToMany
 //    @JoinTable(
 //            name = "bilder_address",
@@ -80,10 +80,10 @@ public class Bilder {
         return district;
     }
 
-//    public Set<Tag> getTags(){
-//        return tags;
-//    }
-//
+    public Set<Tag> getTags(){
+        return tags;
+    }
+
 //    public Set<Address> getAddresses(){
 //        return addresses;
 //    }
@@ -124,10 +124,16 @@ public class Bilder {
         this.district = district;
     }
 
-//    public void setTags(Set<Tag> tags){
-//        this.tags = tags;
-//    }
-//
+    public void setTags(String tagString){
+        String[] tagArr = tagString.split(" {3}");
+        for (String newTag : tagArr){
+            Tag tag = new Tag();
+            tag.setTag(newTag);
+            tags.add(tag);
+        }
+        this.tags = tags;
+    }
+
 //    public void setAddresses(Set<Address> addresses){
 //        this.addresses = addresses;
 //    }
