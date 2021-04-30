@@ -2,6 +2,7 @@ package com.example.demo;
 
 import java.awt.image.BufferedImage;
 import java.io.*;
+import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
@@ -53,11 +54,12 @@ public class CSVHelper {
                     b.setBlock(csvRecord.get("block"));
                     b.setDistrict(csvRecord.get("district"));
 
-                    String urlToPhoto = "https://digitalastadsmuseet.stockholm.se";
-                    urlToPhoto += csvRecord.get("Photo-src");
+                    String imagePath = "https://digitalastadsmuseet.stockholm.se";
+                    imagePath += csvRecord.get("Photo-src");
+                    URL imageUrl = new URL(imagePath);
 
                     // Läs in foto:
-                    BufferedImage fetchedImage = ImageIO.read(new File(urlToPhoto));
+                    BufferedImage fetchedImage = ImageIO.read(new File(imagePath));
 
                     // Gör om till byte array:
                     ImageIO.write(fetchedImage, "jpg", byteArray);
