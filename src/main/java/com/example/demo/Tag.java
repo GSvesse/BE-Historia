@@ -25,6 +25,7 @@ public class Tag {
     }
 
     public Set<Bilder> getBilder(){
+        bilder = new HashSet<>();
         return bilder;
     }
 

@@ -41,13 +41,13 @@ public class Bilder {
     )
     private Set<Tag> tags;
 
-//    @ManyToMany
-//    @JoinTable(
-//            name = "bilder_address",
-//            joinColumns = @JoinColumn(name = "bild_id"),
-//            inverseJoinColumns = @JoinColumn(name = "address_id")
-//    )
-//    Set<Address> addresses;
+    @ManyToMany
+    @JoinTable(
+            name = "bilder_address",
+            joinColumns = @JoinColumn(name = "bild_id"),
+            inverseJoinColumns = @JoinColumn(name = "address_id")
+    )
+    private Set<Address> addresses;
 
     public Integer getId(){
         return id;
@@ -129,6 +129,10 @@ public class Bilder {
         this.district = district;
     }
 
+    /**lägger till taggar i Bilders tag-set
+    * lägger också in bilden i varje tags Bilder-set.
+     * resultat hamnar i bilder_tags tabellen.
+    * @param tagList en lista med taggar associerade med bilden*/
     public void setTags(List<Tag> tagList){
         tags = new HashSet<>();
         for (Tag tag : tagList){
@@ -136,12 +140,15 @@ public class Bilder {
             this.tags.add(tag);
             tag.getBilder().add(this);
         }
-        //this.tags = tags;
     }
 
-//    public void setAddresses(Set<Address> addresses){
-//        this.addresses = addresses;
-//    }
+    public void setAddresses(List<Address> addressList){
+        addresses = new HashSet<>();
+        for (Address address : addressList){
+            this.addresses.add(address);
+            address.getBilder().add(this);
+        }
+    }
 
 
 

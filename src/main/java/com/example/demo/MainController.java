@@ -4,7 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.util.StringUtils;
+
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
@@ -28,11 +28,11 @@ public class MainController {
     private AddressRepository addressRepository;
 
     @PostMapping(path="bilder/add")
-    public @ResponseBody String addNewBild(@RequestParam("image")MultipartFile file, @RequestParam int year, @RequestParam String tags, @RequestParam String documentID, @RequestParam String photographer, @RequestParam String licence, @RequestParam String block, @RequestParam String district, @RequestParam String description) throws IOException {
+    public @ResponseBody String addNewBild(@RequestParam("image")MultipartFile file, @RequestParam int year, @RequestParam String addresses, @RequestParam String tags, @RequestParam String documentID, @RequestParam String photographer, @RequestParam String licence, @RequestParam String block, @RequestParam String district, @RequestParam String description) throws IOException {
         Bilder b = new Bilder();
         b.setImage(file.getBytes());
         b.setYear(year);
-        //b.setAddresses(addresses);
+        b.setAddresses(makeAddresses(addresses));
         b.setTags(makeTags(tags));
         b.setDocumentID(documentID);
         b.setPhotographer(photographer);
@@ -82,23 +82,40 @@ public class MainController {
         return ResponseEntity.ok().contentType(MediaType.IMAGE_JPEG).body(imageBytes);
     }
 
-    // TODO: ändra till att returnera som en lista
+/** Gör om en sträng med taggar till List med Tag-objekt
+ * Skapar ny Tag om taggen inte finns. returnerar sedan listan
+ * @Param tagString sträng med taggar separerade med mer än ett space*/
     public List<Tag> makeTags(String tagString){
+        //tar in en sträng med taggar separerade med mer än ett space och delar på dem, lägger dem i en lista
         String[] tagArr = tagString.trim().split("\\s\\s+");
-
         List<Tag> result = new ArrayList<>();
 
-        assert tagArr != null;
-
+        //går igenom listan och ser om taggen redan finns i tagRepository. Finns den inte skapas ny tag
         for (String newTag : tagArr){
-//            tagRepository.findByTag(newTag).get(0) - Söker genom tagRepository efter ett entry med taggen newTag
             if (tagRepository.findByTag(newTag).isEmpty()) {
                 Tag tag = new Tag();
                 tag.setTag(newTag);
                 System.out.println(tag);
                 tagRepository.save(tag);
             }
+            //Söker genom tagRepository efter ett entry med taggen newTag och lägger till i resultat-lista
             result.add(tagRepository.findByTag(newTag).get(0));
+        }
+        return result;
+    }
+    /** Gör om en sträng med adresser till List med Address-objekt
+     * Skapar ny Address om adressen inte finns. returnerar sedan listan.
+     * @Param addressString sträng med adresser separerade med mer än ett space*/
+    public List<Address> makeAddresses (String addressString){
+        String[] addressArr = addressString.trim().split("\\s\\s+");
+        List<Address> result = new ArrayList<>();
+        for (String newAddress : addressArr){
+            if (addressRepository.findByAddress(newAddress).isEmpty()){
+                Address address = new Address();
+                address.setAddress(newAddress);
+                addressRepository.save(address);
+            }
+            result.add(addressRepository.findByAddress(newAddress).get(0));
         }
         return result;
     }
