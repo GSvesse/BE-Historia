@@ -59,7 +59,7 @@ public class CSVHelper {
                     URL imageUrl = new URL(imagePath);
 
                     // Läs in foto:
-                    BufferedImage fetchedImage = ImageIO.read(new File(imagePath));
+                    BufferedImage fetchedImage = ImageIO.read(imageUrl);
 
                     // Gör om till byte array:
                     ImageIO.write(fetchedImage, "jpg", byteArray);

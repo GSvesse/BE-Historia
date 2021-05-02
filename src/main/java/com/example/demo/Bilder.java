@@ -1,11 +1,16 @@
 package com.example.demo;
 
+import org.springframework.util.StringUtils;
+
 import javax.persistence.*;
+import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 
 @Entity(name = "bilder")
 public class Bilder {
+
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer id;
@@ -28,21 +33,21 @@ public class Bilder {
 
     private String district;
 
-//    @ManyToMany
-//    @JoinTable(
-//            name = "bilder_tag",
-//            joinColumns = @JoinColumn(name = "bild_id"),
-//            inverseJoinColumns = @JoinColumn(name = "tag_id")
-//    )
-//    Set<Tag> tags;
-//
-//    @ManyToMany
-//    @JoinTable(
-//            name = "bilder_address",
-//            joinColumns = @JoinColumn(name = "bild_id"),
-//            inverseJoinColumns = @JoinColumn(name = "address_id")
-//    )
-//    Set<Address> addresses;
+    @ManyToMany
+    @JoinTable(
+            name = "bilder_tag",
+            joinColumns = @JoinColumn(name = "bild_id"),
+            inverseJoinColumns = @JoinColumn(name = "tag_id")
+    )
+    private Set<Tag> tags;
+
+    @ManyToMany
+    @JoinTable(
+            name = "bilder_address",
+            joinColumns = @JoinColumn(name = "bild_id"),
+            inverseJoinColumns = @JoinColumn(name = "address_id")
+    )
+    private Set<Address> addresses;
 
     public Integer getId(){
         return id;
@@ -80,10 +85,10 @@ public class Bilder {
         return district;
     }
 
-//    public Set<Tag> getTags(){
-//        return tags;
-//    }
-//
+    public Set<Tag> getTags(){
+        return tags;
+    }
+
 //    public Set<Address> getAddresses(){
 //        return addresses;
 //    }
@@ -124,13 +129,26 @@ public class Bilder {
         this.district = district;
     }
 
-//    public void setTags(Set<Tag> tags){
-//        this.tags = tags;
-//    }
-//
-//    public void setAddresses(Set<Address> addresses){
-//        this.addresses = addresses;
-//    }
+    /**lägger till taggar i Bilders tag-set
+     * lägger också in bilden i varje tags Bilder-set.
+     * resultat hamnar i bilder_tags tabellen.
+     * @param tagList en lista med taggar associerade med bilden*/
+    public void setTags(List<Tag> tagList){
+        tags = new HashSet<>();
+        for (Tag tag : tagList){
+
+            this.tags.add(tag);
+            tag.getBilder().add(this);
+        }
+    }
+
+    public void setAddresses(List<Address> addressList){
+        addresses = new HashSet<>();
+        for (Address address : addressList){
+            this.addresses.add(address);
+            address.getBilder().add(this);
+        }
+    }
 
 
 
