@@ -11,10 +11,11 @@ import org.springframework.web.multipart.MultipartFile;
 public class CSVService {
     @Autowired
     BildRepository bildRepository;
+    CSVHelper CH;
 
     public void save(MultipartFile file) {
         try {
-            List<Bilder> bilder = CSVHelper.csvToDatabase(file.getInputStream());
+            List<Bilder> bilder = CH.csvToDatabase(file.getInputStream());
             bildRepository.saveAll(bilder);
         } catch (IOException e) {
             throw new RuntimeException("fail to store csv data: " + e.getMessage());

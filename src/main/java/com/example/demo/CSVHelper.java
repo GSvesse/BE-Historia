@@ -10,6 +10,7 @@ import java.util.List;
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVParser;
 import org.apache.commons.csv.CSVRecord;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.imageio.ImageIO;
@@ -17,12 +18,54 @@ import javax.imageio.ImageIO;
 public class CSVHelper {
     public static String TYPE = "text/csv";
     //static String[] HEADERs = { lägg eventuellt till headers "såhär", "test" };
+    @Autowired
+    public TagRepository tagRepository;
+    @Autowired
+    public AddressRepository addressRepository;
 
     public static boolean hasCSVFormat(MultipartFile file) {
         return TYPE.equals(file.getContentType());
     }
 
-    public static List<Bilder> csvToDatabase(InputStream input) {
+    /** Gör om en sträng med taggar till List med Tag-objekt
+     * Skapar ny Tag om taggen inte finns. returnerar sedan listan
+     * @Param tagString sträng med taggar separerade med mer än ett space*/
+    public List<Tag> makeTags(String tagString){
+        //tar in en sträng med taggar separerade med mer än ett space och delar på dem, lägger dem i en lista
+        String[] tagArr = tagString.trim().split("\\s\\s+");
+        List<Tag> result = new ArrayList<>();
+
+        //går igenom listan och ser om taggen redan finns i tagRepository. Finns den inte skapas ny tag
+        for (String newTag : tagArr){
+            if (tagRepository.findByTag(newTag).isEmpty()) {
+                Tag tag = new Tag();
+                tag.setTag(newTag);
+                System.out.println(tag);
+                tagRepository.save(tag);
+            }
+            //Söker genom tagRepository efter ett entry med taggen newTag och lägger till i resultat-lista
+            result.add(tagRepository.findByTag(newTag).get(0));
+        }
+        return result;
+    }
+    /** Gör om en sträng med adresser till List med Address-objekt
+     * Skapar ny Address om adressen inte finns. returnerar sedan listan.
+     * @Param addressString sträng med adresser separerade med mer än ett space*/
+    public List<Address> makeAddresses (String addressString){
+        String[] addressArr = addressString.trim().split("\\s\\s+");
+        List<Address> result = new ArrayList<>();
+        for (String newAddress : addressArr){
+            if (addressRepository.findByAddress(newAddress).isEmpty()){
+                Address address = new Address();
+                address.setAddress(newAddress);
+                addressRepository.save(address);
+            }
+            result.add(addressRepository.findByAddress(newAddress).get(0));
+        }
+        return result;
+    }
+
+    public List<Bilder> csvToDatabase(InputStream input) {
         try (BufferedReader fileReader = new BufferedReader(new InputStreamReader(input, StandardCharsets.UTF_8));
              CSVParser csvParser = new CSVParser(fileReader, CSVFormat.DEFAULT.withFirstRecordAsHeader().withIgnoreHeaderCase().withTrim())) {
 
@@ -44,12 +87,12 @@ public class CSVHelper {
                     b.setLicence(csvRecord.get("license"));
 
                     if (!csvRecord.get("Adress").equals("null")){
-                        b.setAddresses(csvRecord.get("Adress"));
+                        b.setAddresses(makeAddresses(csvRecord.get("Adress")));
                     } else {
-                        b.setAddresses(csvRecord.get("street"));
+                        b.setAddresses(makeAddresses(csvRecord.get("street")));
                     }
 
-                    b.setTags(csvRecord.get("Tag"));
+                    b.setTags(makeTags(csvRecord.get("Tag")));
 
                     b.setBlock(csvRecord.get("block"));
                     b.setDistrict(csvRecord.get("district"));
@@ -68,8 +111,6 @@ public class CSVHelper {
 
                     // Sätt till att vara bildens foto:
                     b.setImage(byteImage);
-
-
 
                     bildSamling.add(b);
                 }
