@@ -11,6 +11,8 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 //hejhej
@@ -141,7 +143,5 @@ public class MainController {
         }
         return result;
     }
-
-}
 
 }
