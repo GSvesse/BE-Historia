@@ -1,6 +1,8 @@
 package com.example.demo;
 
 import java.io.IOException;
+import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,11 +13,15 @@ import org.springframework.web.multipart.MultipartFile;
 public class CSVService {
     @Autowired
     BildRepository bildRepository;
-    CSVHelper CH;
+    //CSVHelper CH = new CSVHelper();
 
-    public void save(MultipartFile file) {
+
+    public void save(MultipartFile file, MainController mainController) {
+        CSVHelper CH = new CSVHelper(mainController);
+
         try {
-            List<Bilder> bilder = CH.csvToDatabase(file.getInputStream());
+            InputStream input = file.getInputStream();
+            List<Bilder> bilder = CH.csvToDatabase(input) ;
             bildRepository.saveAll(bilder);
         } catch (IOException e) {
             throw new RuntimeException("fail to store csv data: " + e.getMessage());

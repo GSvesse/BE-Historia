@@ -28,7 +28,7 @@ public class MainController {
     @Autowired
     private AddressRepository addressRepository;
     @Autowired
-    CSVService fileService;
+    private CSVService fileService;
 
     @PostMapping("/uploadcsv")
     public ResponseEntity<ResponseMessage> uploadFile(@RequestParam("file") MultipartFile file) {
@@ -36,7 +36,7 @@ public class MainController {
 
         if (CSVHelper.hasCSVFormat(file)) {
             try {
-                fileService.save(file);
+                fileService.save(file, this);
 
                 message = "Uploaded the file successfully: " + file.getOriginalFilename();
                 return ResponseEntity.status(HttpStatus.OK).body(new ResponseMessage(message));
