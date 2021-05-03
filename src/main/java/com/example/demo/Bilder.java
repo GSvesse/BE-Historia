@@ -130,9 +130,9 @@ public class Bilder {
     }
 
     /**lägger till taggar i Bilders tag-set
-    * lägger också in bilden i varje tags Bilder-set.
+     * lägger också in bilden i varje tags Bilder-set.
      * resultat hamnar i bilder_tags tabellen.
-    * @param tagList en lista med taggar associerade med bilden*/
+     * @param tagList en lista med taggar associerade med bilden*/
     public void setTags(List<Tag> tagList){
         tags = new HashSet<>();
         for (Tag tag : tagList){
@@ -149,7 +149,5 @@ public class Bilder {
             address.getBilder().add(this);
         }
     }
-
-
 
 }

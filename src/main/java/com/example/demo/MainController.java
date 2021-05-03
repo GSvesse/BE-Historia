@@ -1,18 +1,19 @@
 package com.example.demo;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.Set;
 
 //hejhej
 
@@ -26,6 +27,29 @@ public class MainController {
     private TagRepository tagRepository;
     @Autowired
     private AddressRepository addressRepository;
+    @Autowired
+    CSVService fileService;
+
+    @PostMapping("/uploadcsv")
+    public ResponseEntity<ResponseMessage> uploadFile(@RequestParam("file") MultipartFile file) {
+        String message;
+
+        if (CSVHelper.hasCSVFormat(file)) {
+            try {
+                fileService.save(file);
+
+                message = "Uploaded the file successfully: " + file.getOriginalFilename();
+                return ResponseEntity.status(HttpStatus.OK).body(new ResponseMessage(message));
+            } catch (Exception e) {
+                message = "Could not upload the file: " + file.getOriginalFilename() + "!";
+                return ResponseEntity.status(HttpStatus.EXPECTATION_FAILED).body(new ResponseMessage(message));
+            }
+        }
+
+        message = "Please upload a csv file!";
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ResponseMessage(message));
+    }
+
 
     @PostMapping(path="bilder/add")
     public @ResponseBody String addNewBild(@RequestParam("image")MultipartFile file, @RequestParam int year, @RequestParam String addresses, @RequestParam String tags, @RequestParam String documentID, @RequestParam String photographer, @RequestParam String licence, @RequestParam String block, @RequestParam String district, @RequestParam String description) throws IOException {
@@ -82,9 +106,9 @@ public class MainController {
         return ResponseEntity.ok().contentType(MediaType.IMAGE_JPEG).body(imageBytes);
     }
 
-/** Gör om en sträng med taggar till List med Tag-objekt
- * Skapar ny Tag om taggen inte finns. returnerar sedan listan
- * @Param tagString sträng med taggar separerade med mer än ett space*/
+    /** Gör om en sträng med taggar till List med Tag-objekt
+     * Skapar ny Tag om taggen inte finns. returnerar sedan listan
+     * @Param tagString sträng med taggar separerade med mer än ett space*/
     public List<Tag> makeTags(String tagString){
         //tar in en sträng med taggar separerade med mer än ett space och delar på dem, lägger dem i en lista
         String[] tagArr = tagString.trim().split("\\s\\s+");
@@ -119,5 +143,4 @@ public class MainController {
         }
         return result;
     }
-
 }
