@@ -122,8 +122,10 @@ public class Bilder {
     }
 
     public void setBlock(String block){
-        this.block = block;
+        String[] r = block.trim().split("\\s\\s+");
+        this.block = r[0];
     }
+
 
     public void setDistrict(String district){
         this.district = district;
