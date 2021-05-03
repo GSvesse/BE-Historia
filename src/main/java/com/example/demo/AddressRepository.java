@@ -7,7 +7,6 @@ import java.util.List;
 
 @Repository
 public interface AddressRepository extends CrudRepository<Address, Integer> {
-}
 
     public List<Address> findByAddress(String address);
 }
