@@ -24,7 +24,8 @@ public class CSVHelper {
     public AddressRepository addressRepository;
 
     public static boolean hasCSVFormat(MultipartFile file) {
-        return TYPE.equals(file.getContentType());
+        return true;
+        //return TYPE.equals(file.getContentType());
     }
 
     /** Gör om en sträng med taggar till List med Tag-objekt
