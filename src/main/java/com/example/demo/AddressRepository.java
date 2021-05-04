@@ -9,4 +9,6 @@ import java.util.List;
 public interface AddressRepository extends CrudRepository<Address, Integer> {
 
     public List<Address> findByAddress(String address);
+
+    Address findAddressByAddress (String address);
 }

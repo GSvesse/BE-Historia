@@ -105,6 +105,20 @@ public class MainController {
 
         return ResponseEntity.ok().contentType(MediaType.IMAGE_JPEG).body(imageBytes);
     }
+// hittar rätt bilder, men klarar inte av att displaya om den hittar mer än en bild
+    @GetMapping("files/getPicsByAddress/{address}")
+    public ResponseEntity<byte[]> getPicsByAddress(@PathVariable("address") String addressName) throws SQLException {
+        Address address = addressRepository.findAddressByAddress(addressName);
+        Optional<Bilder> bild = bildRepository.findAllByAddressesEquals(address);
+        byte[] imageBytes = null;
+        if (bild.isPresent()) {
+
+            imageBytes = bild.get().getImage();
+        }
+
+        return ResponseEntity.ok().contentType(MediaType.IMAGE_JPEG).body(imageBytes);
+    }
+
 
     /** Gör om en sträng med taggar till List med Tag-objekt
      * Skapar ny Tag om taggen inte finns. returnerar sedan listan
