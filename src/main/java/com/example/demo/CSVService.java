@@ -1,8 +1,6 @@
 package com.example.demo;
 
 import java.io.IOException;
-import java.io.InputStream;
-import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,8 +11,7 @@ import org.springframework.web.multipart.MultipartFile;
 public class CSVService {
     @Autowired
     BildRepository bildRepository;
-    //CSVHelper CH = new CSVHelper();
-
+    CSVHelper CH;
 
     public void save(MultipartFile file, MainController mainController) {
         CSVHelper CH = new CSVHelper(mainController);
