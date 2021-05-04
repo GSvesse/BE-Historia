@@ -5,7 +5,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -107,17 +106,23 @@ public class MainController {
     }
 // hittar rätt bilder, men klarar inte av att displaya om den hittar mer än en bild
     @GetMapping("files/getPicsByAddress/{address}")
-    public ResponseEntity<byte[]> getPicsByAddress(@PathVariable("address") String addressName) throws SQLException {
+    public ResponseEntity<List<byte[]>> getPicsByAddress(@PathVariable("address") String addressName) throws SQLException {
         Address address = addressRepository.findAddressByAddress(addressName);
-        Optional<Bilder> bild = bildRepository.findAllByAddressesEquals(address);
+        List<Bilder> bilderList = bildRepository.findAllByAddressesEquals(address);
         byte[] imageBytes = null;
-        if (bild.isPresent()) {
+        List<byte[]> imageList = new ArrayList<>();
+        for (Bilder bild : bilderList){
 
-            imageBytes = bild.get().getImage();
+            imageBytes = bild.getImage();
+            imageList.add(imageBytes);
         }
 
-        return ResponseEntity.ok().contentType(MediaType.IMAGE_JPEG).body(imageBytes);
+        return ResponseEntity.ok().contentType(MediaType.IMAGE_JPEG).body(imageList);
     }
+
+//    public List<byte[]> returnsImages(){
+//
+//    }
 
 
     /** Gör om en sträng med taggar till List med Tag-objekt
