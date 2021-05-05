@@ -86,7 +86,7 @@ public class CSVHelper {
             for (CSVRecord csvRecord : csvRecords) {
 
                 // Kolla om street och address är null if, hoppa över:
-                if (csvRecord.get("address") != null && csvRecord.get("street") != null){
+                if (!csvRecord.get("address").equals("") && !csvRecord.get("street").equals("")){
 
                     Bilder b = new Bilder();
 
@@ -99,7 +99,7 @@ public class CSVHelper {
                     b.setDistrict(csvRecord.get(11));
                     b.setDocumentID(csvRecord.get(13));
 
-                    if (csvRecord.get(8) != null){
+                    if (!csvRecord.get(8).equals("")){
                         b.setAddresses(mainController.makeAddresses(csvRecord.get(8)));
                     }else {
                         b.setAddresses(mainController.makeAddresses(csvRecord.get(9)));
