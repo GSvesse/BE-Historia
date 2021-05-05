@@ -86,7 +86,7 @@ public class CSVHelper {
             for (CSVRecord csvRecord : csvRecords) {
 
                 // Kolla om street och address är null if, hoppa över:
-                if (!csvRecord.get("address").equals("") || !csvRecord.get("street").equals("")){
+                if (!csvRecord.get(8).equals("") || !csvRecord.get(9).equals("")){
 
                     Bilder b = new Bilder();
 
