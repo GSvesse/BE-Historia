@@ -97,11 +97,12 @@ public class CSVHelper {
                     b.setTags(mainController.makeTags(csvRecord.get(7)));
                     b.setBlock(csvRecord.get(10));
                     b.setDistrict(csvRecord.get(11));
+                    b.setDocumentID(csvRecord.get(13));
 
                     if (!csvRecord.get(8).equals("")){
-                        b.setAddresses(mainController.makeAddresses(csvRecord.get(8)));
-                    } else {
                         b.setAddresses(mainController.makeAddresses(csvRecord.get(9)));
+                    } else {
+                        b.setAddresses(mainController.makeAddresses(csvRecord.get(8)));
                     }
 
                     String imagePath = "https://digitalastadsmuseet.stockholm.se";
