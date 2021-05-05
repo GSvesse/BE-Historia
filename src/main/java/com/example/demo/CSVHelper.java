@@ -100,9 +100,9 @@ public class CSVHelper {
                     b.setDocumentID(csvRecord.get(13));
 
                     if (!csvRecord.get(8).equals("")){
-                        b.setAddresses(mainController.makeAddresses(csvRecord.get(9)));
-                    } else {
                         b.setAddresses(mainController.makeAddresses(csvRecord.get(8)));
+                    }else {
+                        b.setAddresses(mainController.makeAddresses(csvRecord.get(9)));
                     }
 
                     String imagePath = "https://digitalastadsmuseet.stockholm.se";
