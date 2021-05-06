@@ -35,43 +35,11 @@ public class CSVHelper {
         return TYPE.equals(file.getContentType());
     }
 
-/*    *//** Gör om en sträng med taggar till List med Tag-objekt
-     * Skapar ny Tag om taggen inte finns. returnerar sedan listan
-     * @Param tagString sträng med taggar separerade med mer än ett space*//*
-    public List<Tag> makeTags(String tagString){
-        //tar in en sträng med taggar separerade med mer än ett space och delar på dem, lägger dem i en lista
-        String[] tagArr = tagString.trim().split("\\s\\s+");
-        List<Tag> result = new ArrayList<>();
 
-        //går igenom listan och ser om taggen redan finns i tagRepository. Finns den inte skapas ny tag
-        for (String newTag : tagArr){
-            if (tagRepository.findByTag(newTag).isEmpty()) {
-                Tag tag = new Tag();
-                tag.setTag(newTag);
-                System.out.println(tag);
-                tagRepository.save(tag);
-            }
-            //Söker genom tagRepository efter ett entry med taggen newTag och lägger till i resultat-lista
-            result.add(tagRepository.findByTag(newTag).get(0));
-        }
-        return result;
+    public String readFirstEntry (String entry){
+        String[] arr = entry.trim().split("\\s\\s+");
+        return arr[0];
     }
-    *//** Gör om en sträng med adresser till List med Address-objekt
-     * Skapar ny Address om adressen inte finns. returnerar sedan listan.
-     * @Param addressString sträng med adresser separerade med mer än ett space*//*
-    public List<Address> makeAddresses (String addressString){
-        String[] addressArr = addressString.trim().split("\\s\\s+");
-        List<Address> result = new ArrayList<>();
-        for (String newAddress : addressArr){
-            if (addressRepository.findByAddress(newAddress).isEmpty()){
-                Address address = new Address();
-                address.setAddress(newAddress);
-                addressRepository.save(address);
-            }
-            result.add(addressRepository.findByAddress(newAddress).get(0));
-        }
-        return result;
-    }*/
 
     public List<Bilder> csvToDatabase(InputStream input) {
         try (BufferedReader fileReader = new BufferedReader(new InputStreamReader(input, StandardCharsets.UTF_8));
@@ -94,9 +62,19 @@ public class CSVHelper {
                     b.setYear(Integer.parseInt((csvRecord.get(4))));
                     b.setPhotographer(csvRecord.get(5));
                     b.setLicence(csvRecord.get(6));
-                    b.setBlock(csvRecord.get(10));
-                    b.setDistrict(csvRecord.get(11));
                     b.setDocumentID(csvRecord.get(13));
+
+                    if (!csvRecord.get(10).equals("")){
+                        b.setBlock(readFirstEntry(csvRecord.get(10)));
+                    }else{
+                        b.setBlock("");
+                    }
+
+                    if (!csvRecord.get(11).equals("")){
+                        b.setDistrict(readFirstEntry(csvRecord.get(11)));
+                    }else{
+                        b.setDistrict("");
+                    }
 
                     if (!csvRecord.get(8).equals("")){
                         b.setAddresses(mainController.makeAddresses(csvRecord.get(8)));
