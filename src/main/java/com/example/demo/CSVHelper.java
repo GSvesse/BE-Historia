@@ -32,8 +32,7 @@ public class CSVHelper {
 
 
     public static boolean hasCSVFormat(MultipartFile file) {
-        return true;
-        //return TYPE.equals(file.getContentType());
+        return TYPE.equals(file.getContentType());
     }
 
 /*    *//** Gör om en sträng med taggar till List med Tag-objekt
@@ -87,7 +86,7 @@ public class CSVHelper {
             for (CSVRecord csvRecord : csvRecords) {
 
                 // Kolla om street och address är null if, hoppa över:
-                if (!csvRecord.get("address").equals("null") && !csvRecord.get("street").equals("null")){
+                if (!csvRecord.get(8).equals("") || !csvRecord.get(9).equals("")){
 
                     Bilder b = new Bilder();
 
@@ -95,15 +94,17 @@ public class CSVHelper {
                     b.setYear(Integer.parseInt((csvRecord.get(4))));
                     b.setPhotographer(csvRecord.get(5));
                     b.setLicence(csvRecord.get(6));
-                    b.setTags(mainController.makeTags(csvRecord.get(7)));
                     b.setBlock(csvRecord.get(10));
                     b.setDistrict(csvRecord.get(11));
+                    b.setDocumentID(csvRecord.get(13));
 
-                    if (!csvRecord.get(8).equals("null")){
+                    if (!csvRecord.get(8).equals("")){
                         b.setAddresses(mainController.makeAddresses(csvRecord.get(8)));
-                    } else {
+                    }else {
                         b.setAddresses(mainController.makeAddresses(csvRecord.get(9)));
                     }
+
+                    b.setTags(mainController.makeTags(csvRecord.get(7)));
 
                     String imagePath = "https://digitalastadsmuseet.stockholm.se";
                     imagePath += csvRecord.get(12);
@@ -128,5 +129,4 @@ public class CSVHelper {
             throw new RuntimeException("fail to parse CSV file: " + e.getMessage());
         }
     }
-
 }
