@@ -114,8 +114,8 @@ public class MainController {
     }
 
 
-    @GetMapping("files/getByID")
-    public ResponseEntity<byte[]> fromDatabaseAsResEntity(@RequestParam int id) throws SQLException {
+    @GetMapping("files/{id}")
+    public ResponseEntity<byte[]> fromDatabaseAsResEntity(@PathVariable ("id") int id) throws SQLException {
 
         Optional<Bilder> bild = bildRepository.findById(id);
         byte[] imageBytes = null;
