@@ -49,12 +49,12 @@ public class CSVHelper {
 
             Iterable<CSVRecord> csvRecords = csvParser.getRecords();
 
-            ByteArrayOutputStream byteArray = new ByteArrayOutputStream();
-
             for (CSVRecord csvRecord : csvRecords) {
 
                 // Kolla om street och address är null if, hoppa över:
                 if (!csvRecord.get(8).equals("") || !csvRecord.get(9).equals("")){
+
+                    ByteArrayOutputStream byteArray = new ByteArrayOutputStream();
 
                     Bilder b = new Bilder();
 
@@ -95,6 +95,7 @@ public class CSVHelper {
                     ImageIO.write(fetchedImage, "jpg", byteArray);
                     byteArray.flush();
                     byte[] byteImage = byteArray.toByteArray();
+                    byteArray.close();
 
                     // Sätt till att vara bildens foto:
                     b.setImage(byteImage);
