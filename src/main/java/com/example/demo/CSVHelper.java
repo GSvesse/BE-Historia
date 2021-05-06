@@ -87,30 +87,26 @@ public class CSVHelper {
             for (CSVRecord csvRecord : csvRecords) {
 
                 // Kolla om street och address är null if, hoppa över:
-                System.out.println(csvRecord.get("Adress"));
+                if (!csvRecord.get("address").equals("null") && !csvRecord.get("street").equals("null")){
 
-                if (!csvRecord.get("Adress").equals("null") && !csvRecord.get("street").equals("null")){
-                    System.out.println("inne");
                     Bilder b = new Bilder();
-                    b.setDescription(csvRecord.get(0));
 
-                    b.setYear(Integer.parseInt((csvRecord.get(1))));
-                    b.setPhotographer(csvRecord.get(2));
-                    b.setLicence(csvRecord.get(3));
+                    b.setDescription(csvRecord.get(2));
+                    b.setYear(Integer.parseInt((csvRecord.get(4))));
+                    b.setPhotographer(csvRecord.get(5));
+                    b.setLicence(csvRecord.get(6));
+                    b.setTags(mainController.makeTags(csvRecord.get(7)));
+                    b.setBlock(csvRecord.get(10));
+                    b.setDistrict(csvRecord.get(11));
 
-                    if (!csvRecord.get(4).equals("null")){
-                        b.setAddresses(mainController.makeAddresses(csvRecord.get(4)));
+                    if (!csvRecord.get(8).equals("null")){
+                        b.setAddresses(mainController.makeAddresses(csvRecord.get(8)));
                     } else {
-                        b.setAddresses(mainController.makeAddresses(csvRecord.get(5)));
+                        b.setAddresses(mainController.makeAddresses(csvRecord.get(9)));
                     }
 
-                    b.setTags(mainController.makeTags(csvRecord.get(6)));
-
-                    b.setBlock(csvRecord.get(7));
-                    b.setDistrict(csvRecord.get(8));
-
                     String imagePath = "https://digitalastadsmuseet.stockholm.se";
-                    imagePath += csvRecord.get(9);
+                    imagePath += csvRecord.get(12);
                     URL imageUrl = new URL(imagePath);
 
                     // Läs in foto:
