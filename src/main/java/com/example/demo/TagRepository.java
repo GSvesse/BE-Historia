@@ -8,5 +8,7 @@ import java.util.List;
 @Repository
 public interface TagRepository extends CrudRepository<Tag, Integer>{
 
-    public List<Tag> findByTag(String tag);
+    List<Tag> findByTag(String tag);
+
+    Tag findTagByTag (String tag);
 }

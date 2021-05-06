@@ -12,4 +12,10 @@ public interface BildRepository extends CrudRepository<Bilder, Integer> {
 
     List<Bilder> findAllByAddressesEquals(Address address);
 
+    List<Bilder> findAllByTagsEquals (Tag tag);
+
+    List<Bilder> findAllByDistrictEquals (String district);
+
+    List<Bilder> findAllByYearBetween (int start, int end);
+
 }

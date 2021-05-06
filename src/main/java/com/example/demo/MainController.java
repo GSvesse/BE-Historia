@@ -10,9 +10,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 //hejhej
 
@@ -87,10 +85,34 @@ public class MainController {
     public @ResponseBody Iterable<Bilder>getAllBilder(){
         return bildRepository.findAll();
     }
+
     @GetMapping(path="/addresses")
     public @ResponseBody Iterable<Address>getAllAddresses(){
         return addressRepository.findAll();
     }
+
+    @GetMapping(path = "/files/getByAddress/{address}")
+    public @ResponseBody Iterable<Bilder>getByAddress(@PathVariable ("address") String addressName){
+        Address address = addressRepository.findAddressByAddress(addressName);
+        return bildRepository.findAllByAddressesEquals(address);
+    }
+
+    @GetMapping(path = "/files/getByTag/{tag}")
+    public @ResponseBody Iterable<Bilder> getByTag(@PathVariable ("tag") String tagName){
+        Tag tag = tagRepository.findTagByTag(tagName);
+        return bildRepository.findAllByTagsEquals(tag);
+    }
+
+    @GetMapping(path = "/files/getByDistrict/{district}")
+    public @ResponseBody Iterable<Bilder> getByDistrict(@PathVariable ("district") String district){
+        return bildRepository.findAllByDistrictEquals(district);
+    }
+
+    @GetMapping(path = "/files/getByYear")
+    public @ResponseBody Iterable<Bilder> getByYear(@RequestParam int start, @RequestParam int end){
+        return bildRepository.findAllByYearBetween(start, end);
+    }
+
 
     @GetMapping("files/{id}")
     public ResponseEntity<byte[]> fromDatabaseAsResEntity(@PathVariable("id") Integer id) throws SQLException {
@@ -101,29 +123,8 @@ public class MainController {
 
             imageBytes = bild.get().getImage();
         }
-
         return ResponseEntity.ok().contentType(MediaType.IMAGE_JPEG).body(imageBytes);
     }
-// hittar rätt bilder, men klarar inte av att displaya om den hittar mer än en bild
-    @GetMapping("files/getPicsByAddress/{address}")
-    public ResponseEntity<List<byte[]>> getPicsByAddress(@PathVariable("address") String addressName) throws SQLException {
-        Address address = addressRepository.findAddressByAddress(addressName);
-        List<Bilder> bilderList = bildRepository.findAllByAddressesEquals(address);
-        byte[] imageBytes = null;
-        List<byte[]> imageList = new ArrayList<>();
-        for (Bilder bild : bilderList){
-
-            imageBytes = bild.getImage();
-            imageList.add(imageBytes);
-        }
-
-        return ResponseEntity.ok().contentType(MediaType.IMAGE_JPEG).body(imageList);
-    }
-
-//    public List<byte[]> returnsImages(){
-//
-//    }
-
 
     /** Gör om en sträng med taggar till List med Tag-objekt
      * Skapar ny Tag om taggen inte finns. returnerar sedan listan
