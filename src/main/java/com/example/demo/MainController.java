@@ -114,8 +114,8 @@ public class MainController {
     }
 
 
-    @GetMapping("files/{id}")
-    public ResponseEntity<byte[]> fromDatabaseAsResEntity(@PathVariable("id") Integer id) throws SQLException {
+    @GetMapping("files/getByID")
+    public ResponseEntity<byte[]> fromDatabaseAsResEntity(@RequestParam int id) throws SQLException {
 
         Optional<Bilder> bild = bildRepository.findById(id);
         byte[] imageBytes = null;
@@ -139,7 +139,6 @@ public class MainController {
             if (tagRepository.findByTag(newTag).isEmpty()) {
                 Tag tag = new Tag();
                 tag.setTag(newTag);
-                System.out.println(tag);
                 tagRepository.save(tag);
             }
             //Söker genom tagRepository efter ett entry med taggen newTag och lägger till i resultat-lista
