@@ -6,6 +6,7 @@ import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVParser;
@@ -24,6 +25,8 @@ public class CSVHelper {
     public TagRepository tagRepository;
     @Autowired
     public AddressRepository addressRepository;
+    @Autowired
+    public BildRepository bildRepository;
     MainController mainController;
 
     public CSVHelper(MainController mainController){
@@ -41,6 +44,14 @@ public class CSVHelper {
         return arr[0];
     }
 
+    private boolean avoidDuplicates(String documentID){
+        Optional<Bilder> newBild = bildRepository.findBilderByDocumentIDEquals(documentID);
+        if(newBild.isPresent()){
+            return false;
+        }
+        return true;
+    }
+
     public List<Bilder> csvToDatabase(InputStream input) {
         try (BufferedReader fileReader = new BufferedReader(new InputStreamReader(input, StandardCharsets.UTF_8));
              CSVParser csvParser = new CSVParser(fileReader, CSVFormat.EXCEL.withDelimiter(';').withFirstRecordAsHeader())) {
@@ -51,8 +62,8 @@ public class CSVHelper {
 
             for (CSVRecord csvRecord : csvRecords) {
 
-                // Kolla om street och address är null if, hoppa över:
-                if (!csvRecord.get(8).equals("") || !csvRecord.get(9).equals("")){
+                // Kolla om street och address är null och om dokumentid redan finns if, hoppa över:
+                if ((!csvRecord.get(8).equals("") || !csvRecord.get(9).equals("")) && avoidDuplicates(csvRecord.get(13))){
 
                     ByteArrayOutputStream byteArray = new ByteArrayOutputStream();
 
