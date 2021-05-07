@@ -10,5 +10,7 @@ public interface AddressRepository extends CrudRepository<Address, Integer> {
 
     List<Address> findByAddress(String address);
 
+    List<Address> findAllByAddressContains (String address);
+
     Address findAddressByAddress (String address);
 }

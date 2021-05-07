@@ -12,6 +12,8 @@ public interface BildRepository extends CrudRepository<Bilder, Integer> {
 
     List<Bilder> findAllByAddressesEquals(Address address);
 
+    List<Bilder> findAllByAddressesContaining(Address address);
+
     Optional<Bilder> findBilderByDocumentIDEquals (String documentID);
 
     List<Bilder> findAllByTagsEquals (Tag tag);

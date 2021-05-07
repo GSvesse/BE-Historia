@@ -94,6 +94,12 @@ public class MainController {
     @GetMapping(path = "/files/getByAddress/{address}")
     public @ResponseBody Iterable<Bilder>getByAddress(@PathVariable ("address") String addressName){
         Address address = addressRepository.findAddressByAddress(addressName);
+        return bildRepository.findAllByAddressesContaining(address);
+    }
+
+    @GetMapping(path = "/files/getByAddressLike/{address}")
+    public @ResponseBody Iterable<Bilder>getByAddressLike(@PathVariable ("address") String addressName){
+        Address address = addressRepository.findAddressByAddress(addressName);
         return bildRepository.findAllByAddressesEquals(address);
     }
 
