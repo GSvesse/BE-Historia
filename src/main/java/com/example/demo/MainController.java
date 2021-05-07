@@ -162,4 +162,12 @@ public class MainController {
         }
         return result;
     }
+
+    public boolean avoidDuplicates(String documentID){
+        Optional<Bilder> newBild = bildRepository.findBilderByDocumentIDEquals(documentID);
+        if(newBild.isPresent()){
+            return false;
+        }
+        return true;
+    }
 }

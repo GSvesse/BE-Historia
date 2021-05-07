@@ -21,12 +21,7 @@ import javax.imageio.ImageIO;
 public class CSVHelper {
     public static String TYPE = "text/csv";
     static String[] HEADERs = {"Adress", "Description", "year" };
-    @Autowired
-    public TagRepository tagRepository;
-    @Autowired
-    public AddressRepository addressRepository;
-    @Autowired
-    public BildRepository bildRepository;
+
     MainController mainController;
 
     public CSVHelper(MainController mainController){
@@ -44,14 +39,6 @@ public class CSVHelper {
         return arr[0];
     }
 
-    private boolean avoidDuplicates(String documentID){
-        Optional<Bilder> newBild = bildRepository.findBilderByDocumentIDEquals(documentID);
-        if(newBild.isPresent()){
-            return false;
-        }
-        return true;
-    }
-
     public List<Bilder> csvToDatabase(InputStream input) {
         try (BufferedReader fileReader = new BufferedReader(new InputStreamReader(input, StandardCharsets.UTF_8));
              CSVParser csvParser = new CSVParser(fileReader, CSVFormat.EXCEL.withDelimiter(';').withFirstRecordAsHeader())) {
@@ -63,7 +50,7 @@ public class CSVHelper {
             for (CSVRecord csvRecord : csvRecords) {
 
                 // Kolla om street och address är null och om dokumentid redan finns if, hoppa över:
-                if ((!csvRecord.get(8).equals("") || !csvRecord.get(9).equals("")) && avoidDuplicates(csvRecord.get(13))){
+                if ((!csvRecord.get(8).equals("") || !csvRecord.get(9).equals("")) && mainController.avoidDuplicates(csvRecord.get(13))){
 
                     ByteArrayOutputStream byteArray = new ByteArrayOutputStream();
 
