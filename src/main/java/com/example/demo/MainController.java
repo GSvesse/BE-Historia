@@ -1,11 +1,16 @@
 package com.example.demo;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.util.JSONPObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.client.RestTemplate;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
@@ -132,6 +137,7 @@ public class MainController {
         return ResponseEntity.ok().contentType(MediaType.IMAGE_JPEG).body(imageBytes);
     }
 
+
     /** Gör om en sträng med taggar till List med Tag-objekt
      * Skapar ny Tag om taggen inte finns. returnerar sedan listan
      * @Param tagString sträng med taggar separerade med mer än ett space*/
@@ -155,13 +161,16 @@ public class MainController {
     /** Gör om en sträng med adresser till List med Address-objekt
      * Skapar ny Address om adressen inte finns. returnerar sedan listan.
      * @Param addressString sträng med adresser separerade med mer än ett space*/
-    public List<Address> makeAddresses (String addressString){
+    public List<Address> makeAddresses (String addressString) throws JsonProcessingException {
         String[] addressArr = addressString.trim().split("\\s\\s+");
         List<Address> result = new ArrayList<>();
         for (String newAddress : addressArr){
             if (addressRepository.findByAddress(newAddress).isEmpty()){
                 Address address = new Address();
                 address.setAddress(newAddress);
+                double[] latlong = getCoordinatesFromAddress(newAddress);
+                address.setLatitude(latlong[0]);
+                address.setLongitude(latlong[1]);
                 addressRepository.save(address);
             }
             result.add(addressRepository.findByAddress(newAddress).get(0));
@@ -169,8 +178,50 @@ public class MainController {
         return result;
     }
 
+    private double[] getCoordinatesFromAddress(String address) throws JsonProcessingException {
+        double[] latLong = new double[2];
+        RestTemplate restTemplate = new RestTemplate();
+        ObjectMapper mapper = new ObjectMapper();
+        String geocodeResponse = restTemplate.getForObject(
+                "https://maps.googleapis.com/maps/api/geocode/json?address={address}&key=AIzaSyCgp3abC2j7C5SaW65u3jLMxUE4BjisXDo",
+                    String.class, address);
+        assert geocodeResponse != null;
+        JsonNode responseJsonNode = mapper.readTree(geocodeResponse);
+        JsonNode results = responseJsonNode.get("results");
+        if(results.isEmpty()){
+            System.out.println(address);
+            latLong[0] = 0;
+            latLong[1] = 0;
+            return latLong;
+        }
+        JsonNode geometry = results.findValue("geometry");
+        JsonNode location = geometry.findValue("location");
+        double lat = location.get("lat").asDouble();
+        double lng = location.get("lng").asDouble();
+        latLong[0] = lat;
+        latLong[1] = lng;
+        try {
+            Thread.sleep( 1000);
+        } catch (InterruptedException ie) {
+            Thread.currentThread().interrupt();
+        }
+        return latLong;
+    }
+
     public boolean avoidDuplicates(String documentID){
         Optional<Bilder> newBild = bildRepository.findBilderByDocumentIDEquals(documentID);
         return !newBild.isPresent();
+    }
+
+    @GetMapping(path= "/setCoords")
+    public void setAllAddressCoords() throws JsonProcessingException {
+        for (Address address : addressRepository.findAll()){
+            String addressName = address.getAddress();
+            double[] latlong = getCoordinatesFromAddress(addressName);
+            address.setLatitude(latlong[0]);
+            address.setLongitude(latlong[1]);
+            addressRepository.save(address);
+
+        }
     }
 }
