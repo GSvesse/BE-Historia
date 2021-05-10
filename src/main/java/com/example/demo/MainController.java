@@ -3,7 +3,6 @@ package com.example.demo;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.util.JSONPObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -102,9 +101,11 @@ public class MainController {
         return bildRepository.findAllByAddressesContaining(address);
     }
 
+    // ny version av hämtning av adresser
     @GetMapping(path = "/files/getByAddressLike/{address}")
     public @ResponseBody Iterable<Bilder>getByAddressLike(@PathVariable ("address") String addressName){
-        Address address = addressRepository.findAddressByAddress(addressName);
+        addressName += "_";
+        Address address = addressRepository.includeAllAddressesOnStreet(addressName);
         return bildRepository.findAllByAddressesEquals(address);
     }
 
