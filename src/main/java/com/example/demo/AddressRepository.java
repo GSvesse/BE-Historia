@@ -17,8 +17,8 @@ public interface AddressRepository extends CrudRepository<Address, Integer> {
     Address findAddressByAddress (String address);
 
     // ny, används av getByAddressLike:
-    @Query(value = "SELECT a FROM address a WHERE a.address like :address")
-    Address includeAllAddressesOnStreet(
-            @Param("addressName") String address
+    @Query(value = "SELECT a FROM address a WHERE a.address like :addressName")
+    List<Address> includeAllAddressesOnStreet(
+            @Param("addressName") String addressName
     );
 }

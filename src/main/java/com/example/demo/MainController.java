@@ -105,8 +105,15 @@ public class MainController {
     @GetMapping(path = "/files/getByAddressLike/{address}")
     public @ResponseBody Iterable<Bilder>getByAddressLike(@PathVariable ("address") String addressName){
         addressName += "_";
-        Address address = addressRepository.includeAllAddressesOnStreet(addressName);
-        return bildRepository.findAllByAddressesEquals(address);
+        List<Address> addresses = addressRepository.includeAllAddressesOnStreet(addressName);
+        if (addresses.isEmpty()){
+            return null;
+        }
+        List <Bilder> pictures = null;
+        for (Address a : addresses){
+            pictures.addAll(bildRepository.findAllByAddressesEquals(a));
+        }
+        return pictures;
     }
 
     @GetMapping(path = "/files/getByTag/{tag}")
