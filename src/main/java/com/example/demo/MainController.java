@@ -103,17 +103,17 @@ public class MainController {
 
     // ny version av hämtning av adresser
     @GetMapping(path = "/files/getByAddressLike/{address}")
-    public @ResponseBody Iterable<Bilder>getByAddressLike(@PathVariable ("address") String addressName){
-        List<Address> addresses = addressRepository.includeAllAddressesOnStreet(addressName);
-        if (addresses.isEmpty()){
+    public @ResponseBody Iterable<Address>getByAddressLike(@PathVariable ("address") String addressName){
+        return addressRepository.includeAllAddressesOnStreet(addressName);
+        /*if (addresses.isEmpty()){
             return null;
         }
-        List <Bilder> pictures = new LinkedList<>();
+        Iterable <Bilder> pictures = new LinkedList<>();
         for (Address a : addresses){
             pictures.addAll(bildRepository.findAllByAddressesEquals(a));
         }
         return pictures;
-    }
+    }*/
 
     @GetMapping(path = "/files/getByTag/{tag}")
     public @ResponseBody Iterable<Bilder> getByTag(@PathVariable ("tag") String tagName){
