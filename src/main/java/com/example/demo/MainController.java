@@ -109,7 +109,7 @@ public class MainController {
         if (addresses.isEmpty()){
             return null;
         }
-        List <Bilder> pictures = null;
+        List <Bilder> pictures = new LinkedList<>();
         for (Address a : addresses){
             pictures.addAll(bildRepository.findAllByAddressesEquals(a));
         }
