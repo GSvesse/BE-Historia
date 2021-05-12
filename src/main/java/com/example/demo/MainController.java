@@ -104,7 +104,6 @@ public class MainController {
     // ny version av hämtning av adresser
     @GetMapping(path = "/files/getByAddressLike/{address}")
     public @ResponseBody Iterable<Bilder>getByAddressLike(@PathVariable ("address") String addressName){
-        addressName += "%" + addressName + "%";
         List<Address> addresses = addressRepository.includeAllAddressesOnStreet(addressName);
         if (addresses.isEmpty()){
             return null;
