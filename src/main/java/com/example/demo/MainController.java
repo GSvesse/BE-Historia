@@ -112,8 +112,8 @@ public class MainController {
         for (Address a : addresses){
             pictures.addAll(bildRepository.findAllByAddressesEquals(a));
         }
-        return pictures;
-    }*/
+        return pictures;*/
+    }
 
     @GetMapping(path = "/files/getByTag/{tag}")
     public @ResponseBody Iterable<Bilder> getByTag(@PathVariable ("tag") String tagName){
