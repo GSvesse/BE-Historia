@@ -49,7 +49,7 @@ public class CSVHelper {
 
             for (CSVRecord csvRecord : csvRecords) {
 
-                // Kolla om street och address är null och om dokumentid redan finns if, hoppa över:
+                // Kolla om street och address är null och om dokumentid redan finns, hoppa över:
                 if ((!csvRecord.get(8).equals("") || !csvRecord.get(9).equals("")) && mainController.avoidDuplicates(csvRecord.get(13))){
 
                     ByteArrayOutputStream byteArray = new ByteArrayOutputStream();
