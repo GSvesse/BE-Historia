@@ -90,9 +90,9 @@ public class Bilder {
         return tags;
     }
 
-//    public Set<Address> getAddresses(){
-//        return addresses;
-//    }
+    public Set<Address> getAddresses(){
+        return addresses;
+    }
 
     public void setId(Integer id){
         this.id=id;
