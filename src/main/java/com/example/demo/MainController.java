@@ -96,6 +96,7 @@ public class MainController {
         return addressRepository.findAll();
     }
 
+
     @GetMapping(path = "/files/getByAddress/{address}")
     public @ResponseBody Iterable<Bilder>getByAddress(@PathVariable ("address") String addressName){
         Address address = addressRepository.findAddressByAddress(addressName);
@@ -224,4 +225,6 @@ public class MainController {
 
         }
     }
+
+
 }
