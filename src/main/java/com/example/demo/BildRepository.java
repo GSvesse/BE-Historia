@@ -20,8 +20,12 @@ public interface BildRepository extends CrudRepository<Bilder, Integer> {
 
     List<Bilder> findAllByTagsEqualsAndYearBetween(Tag tag, int start, int end);
 
+    List<Bilder> findAllByTagsInAndYearBetween(List<Tag> tags, int start, int end);
+
     List<Bilder> findAllByDistrictEquals (String district);
 
     List<Bilder> findAllByYearBetween (int start, int end);
+
+
 
 }

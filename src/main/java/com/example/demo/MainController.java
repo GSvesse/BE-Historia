@@ -20,7 +20,7 @@ import java.util.*;
 
 @Controller
 @CrossOrigin
-@RequestMapping(path="/demo")
+@RequestMapping(path = "/demo")
 public class MainController {
     @Autowired
     private BildRepository bildRepository;
@@ -52,8 +52,9 @@ public class MainController {
     }
 
 
-    @PostMapping(path="bilder/add")
-    public @ResponseBody String addNewBild(@RequestParam("image")MultipartFile file, @RequestParam int year, @RequestParam String addresses, @RequestParam String tags, @RequestParam String documentID, @RequestParam String photographer, @RequestParam String licence, @RequestParam String block, @RequestParam String district, @RequestParam String description) throws IOException {
+    @PostMapping(path = "bilder/add")
+    public @ResponseBody
+    String addNewBild(@RequestParam("image") MultipartFile file, @RequestParam int year, @RequestParam String addresses, @RequestParam String tags, @RequestParam String documentID, @RequestParam String photographer, @RequestParam String licence, @RequestParam String block, @RequestParam String district, @RequestParam String description) throws IOException {
         Bilder b = new Bilder();
         b.setImage(file.getBytes());
         b.setYear(year);
@@ -70,7 +71,8 @@ public class MainController {
     }
 
     @PostMapping(path = "tag/add")
-    public @ResponseBody String addNewTag(@RequestParam String tag){
+    public @ResponseBody
+    String addNewTag(@RequestParam String tag) {
         Tag t = new Tag();
         t.setTag(tag);
         tagRepository.save(t);
@@ -78,48 +80,54 @@ public class MainController {
     }
 
     @PostMapping(path = "address/add")
-    public @ResponseBody String addNewAddress(@RequestParam String address){
+    public @ResponseBody
+    String addNewAddress(@RequestParam String address) {
         Address a = new Address();
         a.setAddress(address);
         addressRepository.save(a);
         return "Saved";
     }
 
-    @GetMapping(path="/all")
-    public @ResponseBody Iterable<Bilder>getAllBilder(){
+    @GetMapping(path = "/all")
+    public @ResponseBody
+    Iterable<Bilder> getAllBilder() {
         return bildRepository.findAll();
     }
 
-    @GetMapping(path="/addresses")
-    public @ResponseBody Iterable<Address>getAllAddresses(){
+    @GetMapping(path = "/addresses")
+    public @ResponseBody
+    Iterable<Address> getAllAddresses() {
         return addressRepository.findAll();
     }
 
-    @GetMapping(path="/tags")
-    public @ResponseBody Iterable<Tag>getAllTags(){
+    @GetMapping(path = "/tags")
+    public @ResponseBody
+    Iterable<Tag> getAllTags() {
         return tagRepository.findAll();
     }
 
     @GetMapping(path = "/files/getByAddress/{address}")
-    public @ResponseBody Iterable<Bilder>getByAddress(@PathVariable ("address") String addressName){
+    public @ResponseBody
+    Iterable<Bilder> getByAddress(@PathVariable("address") String addressName) {
         Address address = addressRepository.findAddressByAddress(addressName);
         return bildRepository.findAllByAddressesContaining(address);
     }
 
     // ny version av hämtning av adresser
     @GetMapping(path = "/files/getByAddressLike/{address}")
-    public @ResponseBody Iterable<Bilder>getByAddressLike(@PathVariable ("address") String addressName){
+    public @ResponseBody
+    Iterable<Bilder> getByAddressLike(@PathVariable("address") String addressName) {
         /*List<Address> addresses = addressRepository.includeAllAddressesOnStreet(addressName);
         if (addresses.isEmpty()){
             return null;
         }*/
         List<Address> addresses = addressRepository.findByAddressIsContaining(addressName);
-        if (addresses.isEmpty()){
+        if (addresses.isEmpty()) {
             return null;
         }
         List<Bilder> pictures = new LinkedList<>();
-        for (Address a : addresses){
-            for (Bilder b : bildRepository.findAllByAddressesContaining(a)){
+        for (Address a : addresses) {
+            for (Bilder b : bildRepository.findAllByAddressesContaining(a)) {
                 pictures.add(b);
             }
         }
@@ -127,55 +135,56 @@ public class MainController {
     }
 
     @GetMapping(path = "/files/getByTag/{tag}")
-    public @ResponseBody Iterable<Bilder> getByTag(@PathVariable ("tag") String tagName){
+    public @ResponseBody
+    Iterable<Bilder> getByTag(@PathVariable("tag") String tagName) {
         Tag tag = tagRepository.findTagByTag(tagName);
         return bildRepository.findAllByTagsEquals(tag);
     }
 
     @GetMapping(path = "/files/getByDistrict/{district}")
-    public @ResponseBody Iterable<Bilder> getByDistrict(@PathVariable ("district") String district){
+    public @ResponseBody
+    Iterable<Bilder> getByDistrict(@PathVariable("district") String district) {
         return bildRepository.findAllByDistrictEquals(district);
     }
 
     @GetMapping(path = "/files/getByYear")
-    public @ResponseBody Iterable<Bilder> getByYear(@RequestParam int start, @RequestParam int end){
+    public @ResponseBody
+    Iterable<Bilder> getByYear(@RequestParam int start, @RequestParam int end) {
         return bildRepository.findAllByYearBetween(start, end);
     }
 
-    @GetMapping(path = "/files/getByFiltering")
-    public @ResponseBody Iterable<Address> getByFiltering(@RequestParam int start, @RequestParam int end, @RequestParam List<String> tag){
+
+    @GetMapping(path = "/getByFiltering")
+    public @ResponseBody
+    Iterable<Address> getByFiltering(@RequestParam(required = false, defaultValue = "0") int start, @RequestParam(required = false, defaultValue = "9999") int end, @RequestParam(required = false, defaultValue = "") List<String> tag) {
         List<Tag> tagList = new ArrayList<>();
-        for(String tagName : tag){
-            tagList.addAll(tagRepository.findByTag(tagName));
-        }
-        if (tagList.isEmpty()){
-            return null;
-        }
+        Set<Bilder> pictures = new HashSet<>();
 
-        Set<Bilder> picturesByTag = new HashSet<>();
-        Set<Bilder> picturesByYear = new HashSet<>();
+        if (start == 0 && end == 9999 && tag.isEmpty()) {
+            return addressRepository.findAll();
 
-        picturesByYear.addAll(bildRepository.findAllByYearBetween(start, end));
-
-        for (Tag t : tagList){
-            for (Bilder b : bildRepository.findAllByTagsEquals(t)){
-                picturesByTag.add(b);
+        } else if (tag.isEmpty()) {
+            pictures.addAll(bildRepository.findAllByYearBetween(start, end));
+        } else {
+            for(String t : tag) {
+                tagList.add(tagRepository.findTagByTag(t));
+            }
+            for (Tag t: tagList) {
+                //TODO se om det går att göra på snabbare sätt. Testat forloop, tog längre tid!
+                pictures.addAll(bildRepository.findAllByTagsEqualsAndYearBetween(t, start, end));
             }
         }
-
-        Set<Bilder> pictures = new HashSet<>(picturesByTag);
-        pictures.retainAll(picturesByYear);
-
         Set<Address> addresses = new HashSet<>();
-        for (Bilder b : pictures){
+        for (Bilder b : pictures) {
             addresses.addAll(addressRepository.findAllByBilder(b));
+
         }
         return addresses;
     }
 
 
     @GetMapping("files/{id}")
-    public ResponseEntity<byte[]> fromDatabaseAsResEntity(@PathVariable ("id") int id) throws SQLException {
+    public ResponseEntity<byte[]> fromDatabaseAsResEntity(@PathVariable("id") int id) throws SQLException {
 
         Optional<Bilder> bild = bildRepository.findById(id);
         byte[] imageBytes = null;
@@ -187,16 +196,19 @@ public class MainController {
     }
 
 
-    /** Gör om en sträng med taggar till List med Tag-objekt
+    /**
+     * Gör om en sträng med taggar till List med Tag-objekt
      * Skapar ny Tag om taggen inte finns. returnerar sedan listan
-     * @Param tagString sträng med taggar separerade med mer än ett space*/
-    public List<Tag> makeTags(String tagString){
+     *
+     * @Param tagString sträng med taggar separerade med mer än ett space
+     */
+    public List<Tag> makeTags(String tagString) {
         //tar in en sträng med taggar separerade med mer än ett space och delar på dem, lägger dem i en lista
         String[] tagArr = tagString.trim().split("\\s\\s+");
         List<Tag> result = new ArrayList<>();
 
         //går igenom listan och ser om taggen redan finns i tagRepository. Finns den inte skapas ny tag
-        for (String newTag : tagArr){
+        for (String newTag : tagArr) {
             if (tagRepository.findByTag(newTag).isEmpty()) {
                 Tag tag = new Tag();
                 tag.setTag(newTag);
@@ -207,14 +219,18 @@ public class MainController {
         }
         return result;
     }
-    /** Gör om en sträng med adresser till List med Address-objekt
+
+    /**
+     * Gör om en sträng med adresser till List med Address-objekt
      * Skapar ny Address om adressen inte finns. returnerar sedan listan.
-     * @Param addressString sträng med adresser separerade med mer än ett space*/
-    public List<Address> makeAddresses (String addressString) throws JsonProcessingException {
+     *
+     * @Param addressString sträng med adresser separerade med mer än ett space
+     */
+    public List<Address> makeAddresses(String addressString) throws JsonProcessingException {
         String[] addressArr = addressString.trim().split("\\s\\s+");
         List<Address> result = new ArrayList<>();
-        for (String newAddress : addressArr){
-            if (addressRepository.findByAddress(newAddress).isEmpty()){
+        for (String newAddress : addressArr) {
+            if (addressRepository.findByAddress(newAddress).isEmpty()) {
                 Address address = new Address();
                 address.setAddress(newAddress);
                 double[] latlong = getCoordinatesFromAddress(newAddress);
@@ -233,11 +249,11 @@ public class MainController {
         ObjectMapper mapper = new ObjectMapper();
         String geocodeResponse = restTemplate.getForObject(
                 "https://maps.googleapis.com/maps/api/geocode/json?address={address}&key=AIzaSyCgp3abC2j7C5SaW65u3jLMxUE4BjisXDo",
-                    String.class, address);
+                String.class, address);
         assert geocodeResponse != null;
         JsonNode responseJsonNode = mapper.readTree(geocodeResponse);
         JsonNode results = responseJsonNode.get("results");
-        if(results.isEmpty()){
+        if (results.isEmpty()) {
             System.out.println(address);
             latLong[0] = 0;
             latLong[1] = 0;
@@ -250,21 +266,21 @@ public class MainController {
         latLong[0] = lat;
         latLong[1] = lng;
         try {
-            Thread.sleep( 1000);
+            Thread.sleep(1000);
         } catch (InterruptedException ie) {
             Thread.currentThread().interrupt();
         }
         return latLong;
     }
 
-    public boolean avoidDuplicates(String documentID){
+    public boolean avoidDuplicates(String documentID) {
         Optional<Bilder> newBild = bildRepository.findBilderByDocumentIDEquals(documentID);
         return !newBild.isPresent();
     }
 
-    @GetMapping(path= "/setCoords")
+    @GetMapping(path = "/setCoords")
     public void setAllAddressCoords() throws JsonProcessingException {
-        for (Address address : addressRepository.findAll()){
+        for (Address address : addressRepository.findAll()) {
             String addressName = address.getAddress();
             double[] latlong = getCoordinatesFromAddress(addressName);
             address.setLatitude(latlong[0]);

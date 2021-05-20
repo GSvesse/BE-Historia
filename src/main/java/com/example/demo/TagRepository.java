@@ -11,4 +11,5 @@ public interface TagRepository extends CrudRepository<Tag, Integer>{
     List<Tag> findByTag(String tag);
 
     Tag findTagByTag (String tag);
+
 }
