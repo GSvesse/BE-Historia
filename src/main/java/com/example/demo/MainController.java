@@ -186,8 +186,8 @@ public class MainController {
         return ResponseEntity.ok().contentType(MediaType.IMAGE_JPEG).body(imageBytes);
     }
 
-    @GetMapping("files/objectById/{id}")
-    public Optional<Bilder> objectById(@PathVariable ("id") int id) throws SQLException {
+    @GetMapping("files/getObjectById/{id}")
+    public Optional<Bilder> getObjectById(@PathVariable ("id") int id) throws SQLException {
         return bildRepository.findById(id);
     }
 
