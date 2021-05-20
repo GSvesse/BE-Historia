@@ -16,6 +16,8 @@ public interface BildRepository extends CrudRepository<Bilder, Integer> {
 
     Optional<Bilder> findBilderByDocumentIDEquals (String documentID);
 
+    Bilder findBilderById (int id);
+
     List<Bilder> findAllByTagsEquals (Tag tag);
 
     List<Bilder> findAllByTagsEqualsAndYearBetween(Tag tag, int start, int end);

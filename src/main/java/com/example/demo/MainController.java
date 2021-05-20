@@ -187,8 +187,8 @@ public class MainController {
     }
 
     @GetMapping(path = "/files/getObjectById/{id}")
-    public Optional<Bilder> getObjectById(@PathVariable ("id") int id) throws SQLException {
-        return bildRepository.findById(id);
+    public Bilder getObjectById(@PathVariable ("id") int id) throws SQLException {
+        return bildRepository.findBilderById(id);
     }
 
 
