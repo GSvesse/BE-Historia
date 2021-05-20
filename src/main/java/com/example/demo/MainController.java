@@ -186,11 +186,10 @@ public class MainController {
         return ResponseEntity.ok().contentType(MediaType.IMAGE_JPEG).body(imageBytes);
     }
 
-    @GetMapping(path = "/files/getById/{id}")
-    public String getById(@PathVariable ("id") int id) throws SQLException {
-        return ("id: " + id);
+    @GetMapping("/files/getById/{id}")
+    public @ResponseBody Bilder getById(@PathVariable ("id") int id) throws SQLException {
+        return bildRepository.findBilderById(id);
     }
-
 
     /** Gör om en sträng med taggar till List med Tag-objekt
      * Skapar ny Tag om taggen inte finns. returnerar sedan listan
