@@ -152,15 +152,20 @@ public class MainController {
             return null;
         }
 
-        Set<Bilder> pictures = new HashSet<>();
+        Set<Bilder> picturesByTag = new HashSet<>();
+        Set<Bilder> picturesByYear = new HashSet<>();
 
-        pictures.addAll(bildRepository.findAllByYearBetween(start, end));
+        picturesByYear.addAll(bildRepository.findAllByYearBetween(start, end));
 
         for (Tag t : tagList){
             for (Bilder b : bildRepository.findAllByTagsEquals(t)){
-                pictures.add(b);
+                picturesByTag.add(b);
             }
         }
+
+        Set<Bilder> pictures = new HashSet<>(picturesByTag);
+        pictures.retainAll(picturesByYear);
+
         Set<Address> addresses = new HashSet<>();
         for (Bilder b : pictures){
             addresses.addAll(addressRepository.findAllByBilder(b));
