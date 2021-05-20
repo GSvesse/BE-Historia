@@ -151,13 +151,17 @@ public class MainController {
         if (tagList.isEmpty()){
             return null;
         }
-        List<Bilder> pictures = new LinkedList<>();
+
+        Set<Bilder> pictures = new HashSet<>();
+
+        pictures.addAll(bildRepository.findAllByYearBetween(start, end));
+
         for (Tag t : tagList){
             for (Bilder b : bildRepository.findAllByTagsEquals(t)){
                 pictures.add(b);
             }
         }
-        List<Address> addresses = new LinkedList<>();
+        Set<Address> addresses = new HashSet<>();
         for (Bilder b : pictures){
             addresses.addAll(addressRepository.findAllByBilder(b));
         }
