@@ -137,6 +137,28 @@ public class MainController {
         return bildRepository.findAllByYearBetween(start, end);
     }
 
+    @GetMapping(path = "/files/getByFiltering")
+    public @ResponseBody Iterable<Address> getByFiltering(@RequestParam int start, @RequestParam int end, @RequestParam List<String> tag){
+        List<Tag> tagList = new ArrayList<>();
+        for(String tagName : tag){
+            tagList.addAll(tagRepository.findByTag(tagName));
+        }
+        if (tagList.isEmpty()){
+            return null;
+        }
+        List<Bilder> pictures = new LinkedList<>();
+        for (Tag t : tagList){
+            for (Bilder b : bildRepository.findAllByTagsEquals(t)){
+                pictures.add(b);
+            }
+        }
+        List<Address> addresses = new LinkedList<>();
+        for (Bilder b : pictures){
+            addresses.addAll(addressRepository.findAllByBilder(b));
+        }
+        return addresses;
+    }
+
 
     @GetMapping("files/{id}")
     public ResponseEntity<byte[]> fromDatabaseAsResEntity(@PathVariable ("id") int id) throws SQLException {

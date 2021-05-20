@@ -12,7 +12,7 @@ public interface AddressRepository extends CrudRepository<Address, Integer> {
 
     List<Address> findByAddress(String address);
 
-    List<Address> findAllByAddressContains (String address);
+    List<Address> findAllByBilder(Bilder bild);
 
     Address findAddressByAddress (String address);
 
