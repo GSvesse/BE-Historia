@@ -95,6 +95,11 @@ public class MainController {
         return addressRepository.findAll();
     }
 
+    @GetMapping(path="/tags")
+    public @ResponseBody Iterable<Tag>getAllTags(){
+        return tagRepository.findAll();
+    }
+
     @GetMapping(path = "/files/getByAddress/{address}")
     public @ResponseBody Iterable<Bilder>getByAddress(@PathVariable ("address") String addressName){
         Address address = addressRepository.findAddressByAddress(addressName);
